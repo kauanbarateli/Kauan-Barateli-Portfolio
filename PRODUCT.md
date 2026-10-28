@@ -1,0 +1,33 @@
+# Portfólio de Kauan Barateli
+
+<!-- impeccable:product-schema 1 -->
+
+## Platform
+web
+
+## Users
+Pessoas e organizações avaliando desenvolvimento de landing pages, sites institucionais e experiências digitais.
+
+## Product Purpose
+Apresentar o trabalho de Kauan Sousa Barateli com interfaces reais, projetos exploráveis e contexto técnico objetivo.
+
+## Capabilities and Constraints
+- Exatamente dois projetos neste momento: Ração de Canto e Segundo Cérebro.
+- Sem CTA de orçamento, conforme resposta do proprietário em 28/10/2026.
+- Links para projetos, demonstrações e redes profissionais. Nenhum formulário de contratação.
+- Segundo Cérebro em desenvolvimento: não apresentar protótipo como produto final.
+- Preservar a base estática HTML/CSS/JavaScript do repositório.
+- Desktop, tablet e celular; teclado e preferência por movimento reduzido.
+
+## Brand Commitments
+Minimalismo premium, monocromático, tipografia expressiva, espaço negativo, animação cinematográfica discreta. Referência de qualidade: Apple, sem copiar ativos, marca, textos ou composição proprietária. Impeccable orienta acabamento. Imagens geradas complementam interfaces reais.
+
+## Evidence on Hand
+- Biografia fornecida: 22 anos, mais de cinco anos em tecnologia, interfaces para e-commerce, liderança de equipes, Engenharia de Software na UNDB.
+- LinkedIn confirmado pelo index.html original: https://www.linkedin.com/in/kauan-barateli/ . Consulta pública confirma formação e projetos; cargos não acessíveis não serão inventados.
+- Ração de Canto: HTML, CSS e JavaScript, landing social e galeria; https://racao-de-canto.vercel.app .
+- Segundo Cérebro: PR #120, commit 2169354099a8ea057690479d35983fab1f84c4c6; Next.js, React, TypeScript, Supabase. Protótipo local e capturas do próprio repositório.
+- Fotos pessoais existentes em assets/img. Não há depoimentos, métricas comerciais ou clientes fornecidos.
+
+## Product Principles
+Mostrar o trabalho antes de qualificá-lo. Distinguir produção de demonstração. Manter o conteúdo fácil de ampliar. Tornar movimento opcional.
