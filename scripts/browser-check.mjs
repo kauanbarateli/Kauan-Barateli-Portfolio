@@ -190,12 +190,19 @@ try {
   await page.locator(".motion-toggle").click();
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.evaluate(() => scrollTo(0, 200));
-  await page.waitForFunction(
-    () =>
-      Number(
-        document.querySelector(".hero-stage").style.getPropertyValue("--p"),
-      ) > 0,
+  // Motion on at desktop size: panels pin, the first one opens and its screens scroll.
+  await page.waitForFunction(() =>
+    document.body.classList.contains("scenes-pinned"),
   );
+  await page.evaluate(() => scrollTo({ top: innerHeight, behavior: "instant" }));
+  await page.waitForFunction(() => {
+    const panel = document.querySelector(".scene-panel");
+    const image = document.querySelector(".scene .device-screen img");
+    return (
+      Number(panel.style.getPropertyValue("--open")) === 1 &&
+      image.style.transform.includes("translate3d")
+    );
+  });
   await page.locator(".statement").scrollIntoViewIfNeeded();
   await page.waitForFunction(
     () =>
@@ -206,8 +213,10 @@ try {
   // The media query change event is dispatched asynchronously.
   await page.waitForFunction(
     () =>
-      document.querySelector(".hero-stage").style.getPropertyValue("--p") ===
-        "" && !document.querySelector(".statement").hasAttribute("data-lit"),
+      !document.body.classList.contains("scenes-pinned") &&
+      document.querySelector(".scene-panel").style.getPropertyValue("--open") ===
+        "" &&
+      !document.querySelector(".statement").hasAttribute("data-lit"),
     null,
     { timeout: 3000 },
   );

@@ -6,7 +6,6 @@ colors:
   white: "#fff"
   ink: "#1c1d20"
   muted: "#65676c"
-  echo: "#7d8085"
   line: "#d9dadc"
   dark: "#202226"
   accent: "#405c51"
@@ -16,6 +15,7 @@ colors:
   night-muted: "#a2a4a9"
   night-dim: "#6b6d72"
   night-line: "#2c2e33"
+  stage-muted: "#4c4f54"
   graphite-stage: "#e4e7e4"
   sand-stage: "#eae6df"
   dark-hover: "#3b3d42"
@@ -35,7 +35,7 @@ typography:
     letterSpacing: "-0.035em"
   project-title:
     fontFamily: "Manrope, Arial, sans-serif"
-    fontSize: "clamp(42px, 6vw, 84px)"
+    fontSize: "clamp(44px, 5vw, 80px)"
     fontWeight: 600
     lineHeight: 1.04
     letterSpacing: "-0.04em"
@@ -53,7 +53,7 @@ typography:
     letterSpacing: "-0.035em"
   tagline:
     fontFamily: "Manrope, Arial, sans-serif"
-    fontSize: "clamp(20px, 2.1vw, 30px)"
+    fontSize: "clamp(20px, 1.9vw, 28px)"
     fontWeight: 500
     lineHeight: 1.3
     letterSpacing: "-0.02em"
@@ -95,7 +95,8 @@ rounded:
   circular: "50%"
 spacing:
   gutter: "clamp(24px, 4.5vw, 72px)"
-  chapter: "clamp(112px, 13vw, 200px)"
+  tile-gap: "16px"
+  header: "68px"
   gap-compact: "12px"
   gap-medium: "24px"
   gap-large: "32px"
@@ -149,6 +150,14 @@ components:
   showcase-sand:
     backgroundColor: "{colors.sand-stage}"
     rounded: "{rounded.surface}"
+  project-panel-graphite:
+    backgroundColor: "{colors.graphite-stage}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.stage}"
+  project-panel-sand:
+    backgroundColor: "{colors.sand-stage}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.stage}"
   night-chapter:
     backgroundColor: "{colors.night}"
     textColor: "{colors.night-text}"
@@ -161,27 +170,27 @@ components:
 
 **Creative North Star: "Catálogo de produto digital"**
 
-Um catálogo de produto digital com branco mineral, texto grafite e espaço negativo, contado em primeira pessoa. A tipografia Manrope concentra a expressão em títulos grandes e centralizados; a interface permanece discreta para que as capturas reais dos projetos ocupem o primeiro plano.
+Um catálogo de produto digital com branco mineral, texto grafite e espaço negativo, contado em primeira pessoa. Os projetos são o conteúdo da página inicial: não há frase de abertura nem apresentação pessoal antes deles. A tipografia Manrope concentra a expressão nos nomes dos projetos; a interface permanece discreta para que as telas reais ocupem o primeiro plano.
 
-A página é organizada em capítulos, como uma página de produto: abertura, projetos, um capítulo escuro sobre como Kauan trabalha e a apresentação pessoal. Cada projeto tem nome, frase de apoio, estado e links antes da tela, nessa ordem. A profundidade vem de superfícies claras, sombras difusas e molduras de navegador. A fotografia autoral de material prateado é cenografia decorativa. O retrato aparece em escala de cinza e ganha cor sob o ponteiro; as capturas preservam as cores das interfaces.
+A página inicial é uma sequência de painéis, como a vitrine de uma loja de produtos: um painel por projeto, depois um painel escuro sobre como Kauan trabalha e o rodapé. Cada painel de projeto junta nome, frase de apoio, estado, links e tecnologias de um lado e, do outro, as telas do projeto em uma moldura de computador com um celular à frente. Em telas grandes, o painel fica fixo enquanto a rolagem percorre as telas. A fotografia autoral de material prateado é o cenário do primeiro painel; as capturas preservam as cores das interfaces.
 
 Este documento registra o sistema existente em `css/portfolio.css`, `js/app.js` e `src/render.mjs`. Os textos ficam em `src/content.mjs`. Os tokens representam a base desktop; as alterações responsivas estão descritas abaixo e no sidecar. A estratégia e o conteúdo da superfície pertencem a `.impeccable/surfaces/portfolio.md` e `PRODUCT.md`.
 
 **Key Characteristics:**
 
-- Paleta neutra com um único capítulo escuro e verde discreto em estado e foco.
+- Paleta neutra com um único painel escuro e verde discreto em estado e foco.
 - Uma família tipográfica, contraste forte entre título, frase de apoio e metadados.
-- Composição centralizada nos capítulos da página inicial; grade editorial nas páginas de projeto.
+- Painéis de projeto em duas colunas que se alternam; grade editorial nas páginas de projeto.
 - Capturas reais com alternativas textuais e exploração por teclado.
 - Movimento ligado à rolagem, opcional e sem interceptar o scroll.
 
 ## Voice
 
-Primeira pessoa, frases curtas, português do dia a dia. Cada texto diz uma coisa só e evita pares de slogans paralelos ("Forma e função", "Do começo ao fim"). Nada de rótulos técnicos voltados ao processo, como "dados demonstrativos" ou números de PR, na interface: a honestidade sobre o estado de cada projeto aparece uma vez, em linguagem natural (o selo "Em desenvolvimento" e a nota da galeria). Afirmações factuais vêm de `PRODUCT.md`; opiniões são poucas e do próprio Kauan.
+Primeira pessoa, frases curtas, português do dia a dia. Cada texto diz uma coisa só e evita pares de slogans paralelos ("Forma e função", "Do começo ao fim") e frases de efeito sem projeto por trás. Nada de rótulos técnicos voltados ao processo, como "protótipo", "dados demonstrativos" ou números de PR, junto das telas: o estado de cada projeto aparece no selo ("Em desenvolvimento", "No ar"). Afirmações factuais vêm de `PRODUCT.md`; opiniões são poucas e do próprio Kauan.
 
 ## Colors
 
-A paleta é predominantemente neutra. O papel mineral e o grafite sustentam a composição; as áreas de apresentação têm variações suaves de cinza esverdeado e areia. O capítulo "Atuação" inverte o fundo para criar um pico de ritmo na rolagem.
+A paleta é predominantemente neutra. O papel mineral e o grafite sustentam a composição; os painéis de projeto têm variações suaves de cinza e areia. O painel "Atuação" inverte o fundo para fechar a sequência.
 
 ### Primary
 
@@ -194,15 +203,15 @@ A paleta é predominantemente neutra. O papel mineral e o grafite sustentam a co
 - **Papel mineral — paper:** fundo geral e base translúcida do cabeçalho.
 - **Branco — white:** molduras de navegador, controle selecionado e texto sobre grafite.
 - **Cinza de leitura — muted:** descrições, metadados e navegação de retorno (5.3:1 sobre o papel).
-- **Eco — echo:** segunda linha do título da abertura (3.7:1, apenas em texto grande).
+- **Apoio do painel — stage-muted:** metadados e tecnologias sobre os painéis de projeto (≥4.8:1 nos tons e no cenário).
 - **Linha mineral — line:** divisores e contorno do controle de movimento.
-- **Cinza de exposição — graphite-stage:** palco do Segundo Cérebro.
-- **Areia de exposição — sand-stage:** palco de Ração de Canto.
+- **Cinza de exposição — graphite-stage:** palco do Segundo Cérebro na galeria; o painel da página inicial usa um tom próximo, #dfe2e4, sob a fotografia.
+- **Areia de exposição — sand-stage:** painel e palco de Ração de Canto.
 - **Cinza de passagem — tabs-hover:** fundo da aba sob o ponteiro.
 
 ### Night chapter
 
-- **Noite — night:** fundo do capítulo "Atuação".
+- **Noite — night:** fundo do painel "Atuação".
 - **Texto noturno — night-text:** frase iluminada e títulos dos serviços (16.7:1).
 - **Apoio noturno — night-muted:** descrições dos serviços (7.4:1).
 - **Palavra apagada — night-dim:** palavras ainda não lidas da frase (3.6:1, apenas em texto grande).
@@ -221,63 +230,63 @@ A hierarquia usa pesos regular, medium (frases de apoio) e semibold (títulos e 
 
 ### Hierarchy
 
-- **Display:** título da abertura, centralizado, em duas vozes: grafite ("Eu crio sites") e eco ("que dá gosto usar."). Teto de 96px.
-- **Headline:** títulos de capítulo.
-- **Project title:** nomes dos projetos no catálogo e no link de próximo projeto.
+- **Display:** base de h1. A página inicial tem um h1 apenas para leitores de tela ("Projetos de Kauan Barateli"); o primeiro texto visível é o nome do primeiro projeto.
+- **Headline:** base de h2.
+- **Project title:** nomes dos projetos nos painéis e no link de próximo projeto.
 - **Case display:** nome do projeto como h1 da página de projeto.
-- **Statement:** frase longa do capítulo escuro, iluminada palavra a palavra.
+- **Statement:** frase longa do painel escuro, iluminada palavra a palavra.
 - **Tagline:** frase de apoio sob o nome do projeto, em grafite e peso 500.
-- **Lead:** texto introdutório da abertura, dos capítulos e da apresentação pessoal.
+- **Lead:** textos de apoio das páginas de projeto e da página 404.
 - **Title:** base para subtítulos; serviços usam até 34px e decisões de projeto 22px.
 - **Body / label:** texto corrido e metadados; rótulos de controles usam 12–14px com peso 600.
 - **Action / text link:** botões e links compartilham peso 600; links externos usam seta diagonal, internos seta horizontal.
 
-Abaixo de 701px, o corpo e o lead passam a 16px. O título da abertura usa `clamp(32px, 10.6vw, 56px)` para que "que dá gosto usar." caiba em uma linha a partir de 320px; títulos de capítulo usam 36px, nomes de projeto 40px (36px até 360px), a frase do capítulo escuro 28px (25px até 360px) e o título de projeto 46px (38px até 360px).
+Abaixo de 701px, o corpo e o lead passam a 16px. Nomes de projeto usam 40px (36px até 360px), a frase do painel escuro 28px (25px até 360px) e o título da página de projeto 46px (38px até 360px).
 
 ## Layout
 
-O conteúdo principal ocupa um contêiner central de até 1296px, descontando duas vezes o gutter. O cabeçalho fixo chega a 1392px. A abertura tem texto em até 1040px e um palco de largura total, recortado em até 1488px no estado inicial.
+O cabeçalho fixo chega a 1392px. Os painéis ocupam a largura da janela e são recortados com `clip-path` em até 1488px, com 24px de margem e raio de 20px (12px de margem e 16px de raio no celular). Painéis se separam por 16px (12px no celular). O conteúdo das páginas de projeto ocupa um contêiner central de até 1296px.
 
-O ritmo alterna capítulos separados por `--chapter` (112–200px) com agrupamentos próximos de nome, frase de apoio, estado e links. Na página inicial, cabeçalhos de capítulo e de projeto são centralizados; serviços e apresentação pessoal usam duas colunas. Nas páginas de projeto, título e resumo ficam em grade 1.15:1, e a história usa duas colunas com o desafio fixo enquanto as decisões rolam.
+Cada painel de projeto tem a altura da janela menos o cabeçalho (mínimo de 560px, máximo de 940px) e duas colunas: texto em `minmax(300px, 0.68fr)` e telas em `1.32fr`. Os painéis alternam o lado: o primeiro tem texto à esquerda, o segundo à direita. A área das telas é um contêiner de tamanho (`container-type: size`): a moldura de computador ocupa `min(90cqw, 80cqh × 1.5)` em proporção 3:2, e o celular fica à frente, no canto inferior direito, com 86% da altura da moldura.
 
 As mudanças são orientadas pelo conteúdo:
 
-- **Até 1000px:** estreitar intervalos e prévias; os metadados de projeto passam a duas colunas, tecnologias ocupam a linha inteira.
-- **De 701px a 900px:** a nota da galeria passa para baixo do título.
-- **Até 700px:** gutter de 24px, capítulos de 104px, grupos principais em uma coluna, texto sobre o autor antes do retrato e navegação horizontal compacta. A abertura perde o movimento ligado à rolagem; a prévia inicia em celular.
-- **Até 360px:** gutter de 20px; o cabeçalho mostra apenas a marca "kb." para manter os três links e o controle de movimento em uma linha.
-- **A partir de 1600px:** abertura mais alta.
+- **A partir de 901px de largura e 600px de altura, com movimento ativo:** painéis fixos durante a rolagem (280vh para o Segundo Cérebro, 220vh para Ração de Canto).
+- **Até 1000px:** metadados das páginas de projeto em duas colunas, tecnologias na linha inteira.
+- **Até 900px:** painéis empilhados e centralizados, texto antes das telas, área das telas com `clamp(320px, 62vw, 520px)`; nada fica fixo.
+- **Até 700px:** gutter de 24px, área das telas com `clamp(240px, 66vw, 320px)`, celular maior (108% da altura da moldura) e navegação compacta.
+- **Até 360px:** gutter de 20px e marca do cabeçalho em 13px.
 
-As abas mantêm rolagem horizontal própria com 10px de padding para não cortar o foco. No celular, a captura desktop tem altura automática e limite de 385px; o palco ajusta sua altura, com mínimo de 230px.
+As abas da galeria mantêm rolagem horizontal própria com 10px de padding para não cortar o foco. No celular, a captura desktop da galeria tem altura automática e limite de 385px.
 
 ## Elevation & Depth
 
-O conteúdo editorial é plano, dividido por linhas, espaço e pela inversão do capítulo escuro. O cabeçalho é translúcido (papel a 80% com desfoque) porque o trabalho passa por baixo dele durante a rolagem; uma linha de 1px aparece depois do primeiro pixel rolado. As molduras de navegador recebem sombras difusas; o estado selecionado do seletor de dispositivo tem uma sombra pequena. Os valores completos estão em `.impeccable/design.json`.
+O conteúdo editorial é plano, dividido por linhas, espaço e pela mudança de tom entre painéis. O cabeçalho é translúcido (papel a 80% com desfoque) porque os painéis passam por baixo dele durante a rolagem; uma linha de 1px aparece depois do primeiro pixel rolado. As molduras de computador e celular recebem sombras difusas; o estado selecionado do seletor de dispositivo tem uma sombra pequena. Os valores completos estão em `.impeccable/design.json`.
 
-A abertura sobrepõe duas interfaces sobre a fotografia de material prateado. Em telas a partir de 701px, a rolagem abre o palco até a largura total e endireita as molduras. O celular conserva uma composição estática inclinada.
+No painel do Segundo Cérebro, as telas aparecem inclinadas sobre a fotografia de material prateado; com movimento ativo em telas grandes, o painel se abre até a largura total e as telas se endireitam.
 
 **The Profundidade da interface Rule.** Aplicar sombras às molduras de interfaces e ao estado selecionado dos controles; separar o restante do conteúdo com espaço, linhas finas e mudança de fundo.
 
 ## Shapes
 
-Cantos suaves distinguem os níveis: palco da abertura 20px (14px no celular), superfícies e retrato 16px, molduras 10px. Botões, abas e o seletor de dispositivo são pílulas. As prévias desktop têm apenas os cantos superiores arredondados; a versão de celular usa cantos superiores de 24px na moldura e 17px na área interna. O controle de movimento, o ponto de estado e os pontos decorativos do navegador são circulares.
+Cantos suaves distinguem os níveis: painéis 20px (16px no celular), superfícies da galeria 16px, moldura de computador 12px (8px no celular), molduras da galeria 10px. O celular usa raios proporcionais à área das telas (4.6cqh por fora, 3.4cqh na tela). Botões, abas e o seletor de dispositivo são pílulas. As prévias desktop têm apenas os cantos superiores arredondados; a versão de celular usa cantos superiores de 24px na moldura e 17px na área interna. O controle de movimento, o ponto de estado e os pontos decorativos do navegador são circulares.
 
 ## Motion
 
-Três momentos ligados à rolagem e uma continuidade entre páginas, todos opcionais:
+Os painéis de projeto são o momento principal; cada projeto usa um mecanismo diferente, ligado ao tipo de tela que tem:
 
-- **Abertura (foco principal):** o JavaScript escreve `--p` (0–1) no palco ao longo de 55% da altura da janela. O CSS usa `--p` para abrir o recorte (`clip-path: inset`) até a largura total, zerar o raio e endireitar as duas molduras. Sem `--p`, a composição é a estática.
-- **Frase do capítulo escuro:** as palavras começam em `night-dim` e passam para `night-text` na ordem de leitura conforme a frase atravessa a janela, com transição de cor de 420ms.
-- **Telas dos projetos:** onde o navegador suporta `animation-timeline: view()`, o palco sobe 72px e cresce de 0.94 para 1 ao entrar na janela. Sem suporte, fica estático.
-- **Entre páginas:** View Transitions entre documentos; o nome do projeto é o elemento compartilhado entre o catálogo, o h1 da página e o link de próximo projeto. O cabeçalho permanece no lugar.
+- **Segundo Cérebro (`scroll`):** o protótipo é alto, então a rolagem o percorre. O JavaScript calcula o progresso do painel fixo (0–1). Nos primeiros 12%, escreve `--open`: o recorte se abre até a largura total, o raio zera e as telas se endireitam. De 10% a 95%, as imagens do computador e do celular sobem juntas, do topo ao fim da tela.
+- **Ração de Canto (`wipe`):** as telas são curtas, então a rolagem troca de tela. `--enter` faz as telas subirem e o celular deslizar enquanto o painel chega; de 25% a 75% do progresso, `--w` revela a galeria de baixo para cima (`clip-path: inset`) no computador e no celular.
+- **Frase do painel escuro:** as palavras passam de `night-dim` para `night-text` na ordem de leitura, com transição de cor de 420ms.
+- **Entre páginas:** View Transitions entre documentos; o nome do projeto é o elemento compartilhado entre o painel, o h1 da página e o link de próximo projeto. O cabeçalho permanece no lugar.
 
-A troca de captura usa Web Animation de 240ms; controles usam 160–200ms com a curva `cubic-bezier(0.16, 1, 0.3, 1)`.
+Sem movimento (pausa, preferência do sistema, telas menores que 901 × 600 ou sem JavaScript), os painéis não ficam fixos e mostram o início de cada tela. Ao ligar ou desligar o movimento, a página mantém o painel em leitura no lugar. A troca de captura da galeria usa Web Animation de 240ms; controles usam 160–200ms com a curva `cubic-bezier(0.16, 1, 0.3, 1)`.
 
 ## Components
 
 ### Buttons and text links
 
-A ação preenchida é uma pílula grafite com texto branco, altura mínima de 50px (48px no celular). O hover muda o fundo; o pressionamento aplica escala 0.98. Na abertura, as setas apontam para baixo porque levam a capítulos da mesma página.
+A ação preenchida é uma pílula grafite com texto branco, altura mínima de 50px (48px no celular). O hover muda o fundo; o pressionamento aplica escala 0.98.
 
 O link textual é inline-flex com ícone SVG, intervalo de 8px e altura mínima de 44px. O hover sublinha o texto e desloca a seta: 3px para a direita em links internos e na diagonal em links externos, que também anunciam a abertura em nova aba.
 
@@ -287,9 +296,11 @@ Cabeçalho fixo e translúcido com marca, três âncoras e um controle circular 
 
 O controle de movimento alterna pausar e ativar, com nome acessível e `aria-pressed`. A preferência local é persistida quando o armazenamento está disponível. Se o sistema pede movimento reduzido, o controle fica desabilitado e a preferência do sistema prevalece.
 
-### Project chapter
+### Project panel
 
-Nome (link para a página), frase de apoio, linha de estado com o tipo do projeto, links "Conhecer o projeto" e o link externo principal, depois o palco de apresentação e a lista de tecnologias. O estado usa um ponto: anel cinza para "Em desenvolvimento", ponto verde para "No ar".
+Texto: nome como h2 (link para a página do projeto), frase de apoio, linha de estado com o tipo do projeto, links "Conhecer o projeto" e o link externo principal, e as tecnologias. O estado usa um ponto: anel cinza para "Em desenvolvimento", ponto verde para "No ar".
+
+Telas: moldura de computador com barra de navegador e celular à frente, ambos com capturas reais. A área inteira leva à página do projeto; por repetir o link "Conhecer o projeto", ela fica fora da ordem de tabulação e oculta para tecnologias assistivas. Telas e mecanismo de rolagem vêm de `scene` em `src/content.mjs`.
 
 ### Device selector
 
@@ -303,21 +314,21 @@ Pílulas transparentes que ficam grafite quando selecionadas. O estado usa `aria
 
 Superfície com seletor de dispositivo, moldura e legenda. A captura é uma imagem real dentro de uma região rolável com nome acessível e foco por teclado. A legenda descreve o que a tela mostra e é anunciada com `aria-live="polite"`. A página de projeto também oferece a imagem em tamanho real.
 
-### Night chapter
+### Night panel
 
-Seção de largura total em `night`, com a frase como h2 e a lista de serviços em duas colunas separadas por linhas noturnas. Sem cartões nem ícones.
+Painel em `night` com a mesma margem e o mesmo raio dos painéis de projeto, a frase como h2 e a lista de serviços em duas colunas separadas por linhas noturnas. Sem cartões nem ícones.
 
 ### Focus and fallback behavior
 
 Links, botões e regiões com tabindex usam contorno verde de 3px com afastamento de 5px; links do palco usam afastamento interno de -4px. Há link de salto para o conteúdo.
 
-O modo de movimento reduzido desliga animações, transições, rolagem suave e transições entre páginas. O toggle de pausa remove `--p`, devolve a frase à cor plena e pula a transição da próxima navegação no evento `pageswap`. Sem JavaScript, controles de dispositivo, movimento e abas ficam ocultos; o conteúdo padrão, a frase em cor plena, os links e os acessos alternativos às capturas permanecem disponíveis.
+O modo de movimento reduzido desliga animações, transições, rolagem suave, transições entre páginas e painéis fixos. O toggle de pausa solta os painéis, remove `--open`, `--enter`, `--w` e as transformações das imagens, devolve a frase à cor plena e pula a transição da próxima navegação no evento `pageswap`. Sem JavaScript, controles de dispositivo, movimento e abas ficam ocultos; os painéis estáticos, a frase em cor plena, os links e os acessos alternativos às capturas permanecem disponíveis.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- Do escrever em primeira pessoa, com frases curtas e uma ideia por texto.
+- Do deixar os projetos abrirem a página e escrever em primeira pessoa, com frases curtas e uma ideia por texto.
 - Do preservar as cores e a proporção das capturas reais; usar a imagem gerada como cenografia decorativa.
 - Do usar Manrope auto-hospedada, hierarquia de peso contida e espaço negativo.
 - Do manter foco visível, nomes acessíveis e estado semântico nos controles.
@@ -326,7 +337,7 @@ O modo de movimento reduzido desliga animações, transições, rolagem suave e 
 
 ### Don't:
 
-- Don't usar pares de slogans, rótulos de processo ("dados demonstrativos", "captura do PR") ou superlativos sem evidência.
+- Don't usar frases de efeito antes dos projetos, pares de slogans, rótulos de processo ("protótipo", "dados demonstrativos", "captura do PR") ou superlativos sem evidência.
 - Don't colocar rótulos ou sobretítulos acima dos títulos.
 - Don't usar sombras de mockup em todos os blocos de conteúdo.
 - Don't ocultar conteúdo até uma animação de entrada terminar.

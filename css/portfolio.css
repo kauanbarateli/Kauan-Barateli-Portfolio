@@ -10,7 +10,6 @@
   --white: #fff;
   --ink: #1c1d20;
   --muted: #65676c;
-  --echo: #7d8085;
   --line: #d9dadc;
   --dark: #202226;
   --accent: #405c51;
@@ -20,8 +19,9 @@
   --night-muted: #a2a4a9;
   --night-dim: #6b6d72;
   --night-line: #2c2e33;
+  --stage-muted: #4c4f54;
+  --header: 68px;
   --space: clamp(24px, 4.5vw, 72px);
-  --chapter: clamp(112px, 13vw, 200px);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --radius: 16px;
   --shadow: 0 26px 60px -22px #13171d50;
@@ -215,13 +215,6 @@ section[id] {
 .button:active {
   transform: scale(0.98);
 }
-.hero-actions svg {
-  transform: rotate(90deg);
-}
-.hero-actions .text-link:hover svg {
-  transform: rotate(90deg) translateX(3px);
-}
-
 /* Header: stays with the reader, translucent so the work passes beneath it. */
 .site-header {
   position: sticky;
@@ -304,187 +297,105 @@ body.motion-paused .play-icon {
   display: initial;
 }
 
-/* Hero */
-.hero {
-  padding-top: clamp(64px, 8vw, 120px);
-}
-.hero-intro {
-  width: min(100% - var(--space) * 2, 1040px);
-  margin: 0 auto;
+/* Projects: one panel per project. On large screens with motion on, each panel
+   pins while the page scrolls through its screens (js/app.js sets --open, --enter, --w). */
+.scenes {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: 16px;
+  padding-top: 8px;
 }
-.hero h1 {
-  line-height: 1.03;
+.scene-sticky {
+  height: calc(100svh - var(--header));
+  min-height: 560px;
+  max-height: 940px;
 }
-.hero h1 span {
-  display: block;
-  color: var(--echo);
+body.scenes-pinned .scene[data-scene="scroll"] {
+  height: 280vh;
 }
-.hero-lead {
-  margin-top: 30px;
-  max-width: 40ch;
-  text-wrap: balance;
-  font-size: var(--lead);
-  line-height: 1.55;
-  color: var(--muted);
+body.scenes-pinned .scene[data-scene="wipe"] {
+  height: 220vh;
 }
-.hero-actions {
-  margin-top: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px 32px;
+body.scenes-pinned .scene-sticky {
+  position: sticky;
+  top: var(--header);
 }
-/* The stage opens to the full width while the windows settle flat.
-   --p (0–1) comes from the scroll; without it the composition is static. */
-.hero-stage {
+.scene-panel {
   --inset: max(24px, calc((100% - 1488px) / 2));
-  --stage-radius: 20px;
-  --q: calc(1 - var(--p, 0));
+  --open: 0;
+  --shut: calc(1 - var(--open));
   position: relative;
-  margin-top: clamp(56px, 7vw, 96px);
-  height: clamp(340px, 44vw, 660px);
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.68fr) minmax(0, 1.32fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(32px, 4vw, 72px);
+  padding: 48px
+    max(
+      calc(24px + clamp(32px, 4.5vw, 72px)),
+      calc((100% - 1488px) / 2 + 72px)
+    );
   overflow: hidden;
-  background: #d9dcdf;
   isolation: isolate;
   clip-path: inset(
-    0 calc(var(--inset) * var(--q)) round calc(var(--stage-radius) * var(--q))
+    0 calc(var(--inset) * var(--shut)) round calc(20px * var(--shut))
   );
 }
-.material-image {
+.scene.graphite .scene-panel {
+  background: #dfe2e4;
+}
+.scene.sand .scene-panel {
+  background: #eae6df;
+}
+.scene.is-reversed .scene-panel {
+  grid-template-columns: minmax(0, 1.32fr) minmax(300px, 0.68fr);
+}
+.scene.is-reversed .scene-copy {
+  order: 2;
+}
+.scene-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 66%;
-  position: absolute;
-  inset: 0;
+  object-position: center 30%;
 }
-.hero-scene {
-  position: absolute;
-  inset: 0;
-  width: min(100% - 48px, 1488px);
-  margin-inline: auto;
-}
-.hero-window {
-  position: absolute;
-  box-shadow: 0 25px 70px -15px #222b3850;
-  overflow: hidden;
-  background: #fff;
-  border-radius: 10px;
-  transition: box-shadow 250ms var(--ease);
-}
-.hero-window:hover {
-  box-shadow: 0 30px 70px -15px #11192780;
-}
-.hero-window:focus-visible {
-  outline-offset: -4px;
-}
-.hero-window-chrome {
-  height: 25px;
-  background: #f0f0ee;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 10px;
+.scene-copy {
   position: relative;
-}
-.hero-window-chrome span {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #bfc0c0;
-}
-.hero-window-chrome i {
-  position: absolute;
-  inset: 0;
-  text-align: center;
-  font-style: normal;
-  font-size: 9px;
-  line-height: 25px;
-  color: #686a6c;
-}
-.hero-window img {
-  width: 100%;
-  height: auto;
-}
-.hero-window-main {
-  width: 62%;
-  height: 85%;
-  top: 8%;
-  left: 5.8%;
-  transform: perspective(1300px) rotateY(calc(8deg * var(--q)))
-    rotateX(calc(3deg * var(--q))) rotateZ(calc(-2deg * var(--q)))
-    translateY(calc(var(--p, 0) * -8px));
   z-index: 1;
-}
-.hero-window-secondary {
-  width: 43%;
-  height: 65%;
-  right: 4.5%;
-  top: 28%;
-  transform: perspective(1300px) rotateY(calc(-8deg * var(--q)))
-    rotateZ(calc(4deg * var(--q))) translateY(calc(var(--p, 0) * -14px));
-  z-index: 2;
-}
-
-/* Projects */
-.work-section {
-  padding-top: var(--chapter);
-}
-.section-heading {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  text-align: center;
-  margin-bottom: clamp(72px, 9vw, 136px);
+  align-items: flex-start;
+  max-width: 32rem;
 }
-.section-heading > p {
-  font-size: var(--lead);
-  color: var(--muted);
-  max-width: 40ch;
-  text-wrap: balance;
-}
-.project + .project {
-  margin-top: var(--chapter);
-}
-.project-heading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-bottom: clamp(40px, 5vw, 64px);
-}
-.project-heading h3 {
-  font-size: clamp(42px, 6vw, 84px);
-  line-height: 1.04;
+.scene-copy h2 {
+  font-size: clamp(44px, 5vw, 80px);
+  line-height: 1.02;
   letter-spacing: -0.04em;
 }
-.project-heading h3 a:hover {
+.scene-copy h2 a:hover {
   color: #3b3d42;
 }
 .project-tagline {
-  margin-top: 14px;
-  font-size: clamp(20px, 2.1vw, 30px);
+  margin-top: 16px;
+  font-size: clamp(20px, 1.9vw, 28px);
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  max-width: 40ch;
+  max-width: 22ch;
   text-wrap: balance;
 }
 .project-meta {
   margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
   gap: 6px 18px;
   font-size: 13px;
-  color: var(--muted);
+  color: var(--stage-muted);
 }
 .status {
   display: inline-flex;
@@ -509,8 +420,87 @@ body.motion-paused .play-icon {
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px 32px;
+  gap: 4px 28px;
+}
+.scene-copy .technologies {
+  margin-top: 26px;
+  color: var(--stage-muted);
+}
+/* The screens: a desktop frame with a phone in front, sized to the space left. */
+.scene-media {
+  align-self: stretch;
+  position: relative;
+  display: grid;
+  place-items: center;
+  container-type: size;
+}
+.devices {
+  position: relative;
+  width: min(90cqw, calc(80cqh * 1.5));
+  aspect-ratio: 3 / 2;
+}
+.scene[data-scene="scroll"] .devices {
+  transform: perspective(1600px) rotateY(calc(-9deg * var(--shut)))
+    rotateX(calc(3deg * var(--shut)));
+}
+.scene[data-scene="wipe"] .devices {
+  transform: translateY(calc((1 - var(--enter, 1)) * 12cqh))
+    scale(calc(0.94 + 0.06 * var(--enter, 1)));
+}
+.device-desktop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 40px 90px -36px #13171d73;
+  transition: box-shadow 300ms var(--ease);
+}
+.scene-media:hover .device-desktop {
+  box-shadow: 0 44px 96px -32px #13171d8c;
+}
+.device-desktop .browser-bar {
+  flex: none;
+}
+.device-screen {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+}
+.device-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+body.scenes-pinned .device-screen img {
+  will-change: transform;
+}
+.layer-next {
+  position: absolute;
+  inset: 0 0 auto;
+  clip-path: inset(calc((1 - var(--w, 0)) * 100%) 0 0);
+}
+.device-phone {
+  position: absolute;
+  right: -6%;
+  bottom: -8%;
+  height: 86%;
+  aspect-ratio: 0.48;
+  display: flex;
+  padding: 1.2cqh;
+  border-radius: 4.6cqh;
+  background: #1f2124;
+  box-shadow: 0 30px 60px -24px #0d0f1280;
+}
+.device-phone .device-screen {
+  border-radius: 3.4cqh;
+}
+.scene[data-scene="wipe"] .device-phone {
+  transform: translateX(calc((1 - var(--enter, 1)) * 14cqw));
 }
 .showcase {
   border-radius: var(--radius);
@@ -648,11 +638,6 @@ body.motion-paused .play-icon {
   z-index: 1;
   min-height: 60px;
 }
-.project-foot {
-  display: flex;
-  justify-content: center;
-  padding-top: 22px;
-}
 .technologies {
   display: flex;
   flex-wrap: wrap;
@@ -667,8 +652,10 @@ body.motion-paused .play-icon {
 
 /* How I work: the one dark chapter. Words light up as the statement is read. */
 .practice-section {
-  margin-top: var(--chapter);
-  padding: clamp(112px, 14vw, 216px) 0;
+  width: min(100% - 48px, 1488px);
+  margin: 16px auto 0;
+  border-radius: 20px;
+  padding: clamp(96px, 12vw, 184px) 0;
   background: var(--night);
   color: var(--night-text);
 }
@@ -712,61 +699,10 @@ body.motion-paused .play-icon {
   max-width: 44ch;
 }
 
-/* About */
-.about-section {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  gap: clamp(56px, 9vw, 140px);
-  padding: var(--chapter) 0;
-  align-items: center;
-}
-.portrait-wrap {
-  max-width: 440px;
-}
-.portrait {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  height: auto;
-  object-fit: cover;
-  object-position: center 30%;
-  filter: grayscale(1);
-  border-radius: var(--radius);
-  transition: filter 900ms var(--ease);
-}
-.portrait-wrap:hover .portrait {
-  filter: grayscale(0);
-}
-.portrait-wrap p {
-  font-size: 14px;
-  font-weight: 600;
-  padding-top: 16px;
-}
-.portrait-wrap p span {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--muted);
-}
-.about-copy h2 {
-  margin-bottom: 32px;
-}
-.about-copy > p {
-  color: var(--muted);
-  margin-bottom: 18px;
-  font-size: var(--lead);
-  line-height: 1.6;
-  max-width: 40ch;
-}
-.about-links {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 28px;
-  gap: 4px 32px;
-}
-
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--line);
-  margin-inline: var(--space);
+  margin: 56px var(--space) 0;
   padding: 32px 0 40px;
   display: flex;
   align-items: center;
@@ -1039,21 +975,6 @@ body.motion-paused .play-icon {
   color: var(--muted);
 }
 
-/* Motion: the showcase rises into place as it enters, where the browser supports scroll timelines. */
-@keyframes showcase-rise {
-  from {
-    transform: translateY(72px) scale(0.94);
-  }
-}
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .project .showcase {
-      animation: showcase-rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 32%;
-    }
-  }
-}
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
@@ -1080,19 +1001,6 @@ body.motion-paused .play-icon {
   animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both vt-fade-in;
 }
 
-@media (min-width: 1600px) {
-  .hero {
-    padding-top: 136px;
-  }
-  .hero-stage {
-    height: 700px;
-  }
-}
-@media (min-width: 701px) and (max-width: 1000px) {
-  .hero-stage {
-    height: 420px;
-  }
-}
 @media (max-width: 1000px) {
   .device-stage {
     height: 490px;
@@ -1106,10 +1014,6 @@ body.motion-paused .play-icon {
   }
   .practice-list > div {
     gap: 40px;
-  }
-  .about-section {
-    gap: 56px;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
   }
   .case-title {
     gap: 40px;
@@ -1139,6 +1043,39 @@ body.motion-paused .play-icon {
     height: 541px;
   }
 }
+@media (max-width: 900px) {
+  .scene-sticky {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+  .scene-panel,
+  .scene.is-reversed .scene-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 64px calc(var(--inset) + 32px) 40px;
+  }
+  .scene-copy,
+  .scene.is-reversed .scene-copy {
+    order: 0;
+    align-items: center;
+  }
+  .project-meta,
+  .project-links,
+  .scene-copy .technologies {
+    justify-content: center;
+  }
+  .project-tagline {
+    max-width: 26ch;
+  }
+  .scene-media {
+    align-self: stretch;
+    height: clamp(320px, 62vw, 520px);
+    margin-top: 40px;
+  }
+}
 @media (min-width: 701px) and (max-width: 900px) {
   .gallery-heading {
     display: block;
@@ -1151,7 +1088,6 @@ body.motion-paused .play-icon {
   :root {
     --space: 24px;
     --body: 16px;
-    --chapter: 104px;
     --lead: 16px;
   }
   html {
@@ -1176,20 +1112,6 @@ body.motion-paused .play-icon {
     height: 32px;
     flex-shrink: 0;
   }
-  .hero {
-    padding-top: 52px;
-  }
-  .hero h1 {
-    font-size: clamp(32px, 10.6vw, 56px);
-  }
-  .hero-lead {
-    margin-top: 22px;
-    max-width: 32ch;
-  }
-  .hero-actions {
-    margin-top: 28px;
-    gap: 8px 24px;
-  }
   .button {
     min-height: 48px;
     padding: 12px 22px;
@@ -1198,58 +1120,19 @@ body.motion-paused .play-icon {
   .text-link {
     font-size: 15px;
   }
-  .hero-stage {
+  :root {
+    --header: 60px;
+  }
+  .scenes {
+    gap: 12px;
+  }
+  .scene-panel,
+  .scene.is-reversed .scene-panel {
     --inset: 12px;
-    --stage-radius: 14px;
-    margin-top: 48px;
-    height: 300px;
+    clip-path: inset(0 var(--inset) round 16px);
+    padding: 52px 32px 40px;
   }
-  .hero-scene {
-    width: 100%;
-  }
-  .hero-window-main {
-    width: 82%;
-    height: 68%;
-    top: 8%;
-    left: 6%;
-    transform: rotate(-2deg);
-  }
-  .hero-window-secondary {
-    width: 57%;
-    height: 48%;
-    right: 6%;
-    top: 43%;
-    transform: rotate(4deg);
-  }
-  .hero-window-chrome {
-    height: 18px;
-    padding: 0 7px;
-  }
-  .hero-window-chrome i {
-    line-height: 18px;
-    font-size: 7px;
-  }
-  .hero-window-chrome span {
-    width: 4px;
-    height: 4px;
-  }
-  .hero-window {
-    border-radius: 6px;
-  }
-  .section-heading {
-    gap: 16px;
-    margin-bottom: 64px;
-  }
-  .section-heading h2 {
-    font-size: 36px;
-  }
-  .section-heading > p {
-    max-width: 32ch;
-  }
-  .project-heading {
-    margin-bottom: 28px;
-  }
-  .project-heading h3 {
+  .scene-copy h2 {
     font-size: 40px;
   }
   .project-tagline {
@@ -1263,6 +1146,25 @@ body.motion-paused .play-icon {
   .project-links {
     margin-top: 12px;
     gap: 0 24px;
+  }
+  .scene-copy .technologies {
+    margin-top: 16px;
+  }
+  .scene-media {
+    height: clamp(240px, 66vw, 320px);
+    margin-top: 32px;
+  }
+  .devices {
+    width: min(94cqw, calc(80cqh * 1.5));
+    margin-right: 6%;
+  }
+  .device-desktop {
+    border-radius: 8px;
+  }
+  .device-phone {
+    height: 108%;
+    right: -10%;
+    bottom: -12%;
   }
   .showcase-toolbar {
     padding: 14px 14px 0;
@@ -1304,15 +1206,15 @@ body.motion-paused .play-icon {
     padding: 14px 16px;
     min-height: 47px;
   }
-  .project-foot {
-    padding-top: 16px;
-  }
   .technologies {
     font-size: 12px;
     gap: 4px 16px;
   }
   .practice-section {
-    padding: 104px 0;
+    width: calc(100% - 24px);
+    margin-top: 12px;
+    border-radius: 16px;
+    padding: 88px 0;
   }
   .statement {
     font-size: 28px;
@@ -1332,34 +1234,11 @@ body.motion-paused .play-icon {
   .practice-list p {
     font-size: 15px;
   }
-  .about-section {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: stretch;
-    gap: 40px;
-  }
-  .about-copy h2 {
-    font-size: 34px;
-    margin-bottom: 24px;
-  }
-  .about-links {
-    flex-direction: column;
-    gap: 0;
-    margin-top: 16px;
-  }
-  .portrait-wrap {
-    max-width: 260px;
-  }
-  .portrait-wrap p {
-    font-size: 13px;
-  }
-  .portrait-wrap p span {
-    font-size: 12px;
-  }
   .site-footer {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 10px 20px;
+    margin-top: 40px;
     padding: 24px 0 30px;
     font-size: 12px;
   }
@@ -1511,19 +1390,14 @@ body.motion-paused .play-icon {
   .site-header nav {
     gap: 12px;
   }
-  .site-header .brand-mark {
-    display: inline;
-    border: 0;
-    padding: 0;
-    font-size: 22px;
+  .site-header .brand {
+    font-size: 13px;
   }
-  .site-header .brand-name {
-    display: none;
+  .scene-panel,
+  .scene.is-reversed .scene-panel {
+    padding-inline: 28px;
   }
-  .hero-stage {
-    height: 260px;
-  }
-  .project-heading h3 {
+  .scene-copy h2 {
     font-size: 36px;
   }
   .statement {

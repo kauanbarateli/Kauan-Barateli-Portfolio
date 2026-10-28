@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-28T06:20:00Z",
+  "generatedAt": "2026-10-28T07:10:00Z",
   "title": "Design System: Portfólio de Kauan Barateli",
   "extensions": {
     "sourceFiles": [
@@ -190,22 +190,6 @@
         ],
         "tonalRampSource": "generated-preview-only"
       },
-      "echo": {
-        "role": "neutral",
-        "displayName": "Eco",
-        "purpose": "Segunda linha do título da abertura; somente texto grande.",
-        "tonalRamp": [
-          "oklch(15.00% 0.00837 260.73)",
-          "oklch(26.43% 0.00837 260.73)",
-          "oklch(37.86% 0.00837 260.73)",
-          "oklch(49.29% 0.00837 260.73)",
-          "oklch(60.71% 0.00837 260.73)",
-          "oklch(72.14% 0.00837 260.73)",
-          "oklch(83.57% 0.00837 260.73)",
-          "oklch(95.00% 0.00837 260.73)"
-        ],
-        "tonalRampSource": "generated-preview-only"
-      },
       "night": {
         "role": "neutral",
         "displayName": "Noite",
@@ -285,20 +269,36 @@
           "oklch(95.00% 0.00944 268.36)"
         ],
         "tonalRampSource": "generated-preview-only"
+      },
+      "stage-muted": {
+        "role": "neutral",
+        "displayName": "Apoio do painel",
+        "purpose": "Metadados e tecnologias sobre os painéis de projeto.",
+        "tonalRamp": [
+          "oklch(15.00% 0.00912 260.73)",
+          "oklch(26.43% 0.00912 260.73)",
+          "oklch(37.86% 0.00912 260.73)",
+          "oklch(49.29% 0.00912 260.73)",
+          "oklch(60.71% 0.00912 260.73)",
+          "oklch(72.14% 0.00912 260.73)",
+          "oklch(83.57% 0.00912 260.73)",
+          "oklch(95.00% 0.00912 260.73)"
+        ],
+        "tonalRampSource": "generated-preview-only"
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Título centralizado da abertura, em grafite e eco."
+        "purpose": "Base de h1; na página inicial o h1 é apenas para leitores de tela."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Títulos de capítulo."
+        "purpose": "Base de h2."
       },
       "project-title": {
         "displayName": "Project title",
-        "purpose": "Nome do projeto no catálogo e no próximo projeto."
+        "purpose": "Nome do projeto nos painéis e no próximo projeto."
       },
       "case-display": {
         "displayName": "Case display",
@@ -306,7 +306,7 @@
       },
       "statement": {
         "displayName": "Statement",
-        "purpose": "Frase do capítulo escuro, iluminada palavra a palavra."
+        "purpose": "Frase do painel escuro, iluminada palavra a palavra."
       },
       "tagline": {
         "displayName": "Tagline",
@@ -318,7 +318,7 @@
       },
       "lead": {
         "displayName": "Lead",
-        "purpose": "Texto introdutório da abertura, capítulos e apresentação pessoal."
+        "purpose": "Textos de apoio das páginas de projeto e da 404."
       },
       "body": {
         "displayName": "Body",
@@ -411,27 +411,28 @@
         "purpose": "View Transition entre documentos; nome do projeto como elemento compartilhado."
       },
       {
-        "name": "portrait-color",
-        "value": "900ms",
-        "purpose": "Retrato ganha cor sob o ponteiro."
-      },
-      {
-        "name": "hero-stage",
+        "name": "scene-open",
         "value": "scroll-linked",
-        "purpose": "--p de 0 a 1 em 55% da altura da janela: clip-path abre até a largura total e as molduras endireitam."
+        "purpose": "Segundo Cérebro: --open de 0 a 1 nos primeiros 12% do painel fixo; o recorte abre até a largura total e as telas se endireitam."
       },
       {
-        "name": "showcase-rise",
-        "value": "view timeline",
-        "purpose": "translateY(72px) scale(0.94) até o repouso, de entry 0% a cover 32%, onde suportado."
+        "name": "scene-scroll",
+        "value": "scroll-linked",
+        "purpose": "Segundo Cérebro: de 10% a 95% do painel, as capturas do computador e do celular sobem do topo ao fim da tela."
+      },
+      {
+        "name": "scene-wipe",
+        "value": "scroll-linked",
+        "purpose": "Ração de Canto: --enter faz as telas subirem enquanto o painel chega; --w revela a galeria de baixo para cima de 25% a 75%."
       }
     ],
     "motionPolicy": {
-      "system": "prefers-reduced-motion: reduce remove animações, transições, scroll suave e transições entre páginas, e desabilita a opção de ativar movimento.",
-      "manual": "body.motion-paused remove animações e transições; o JavaScript remove --p do palco, devolve a frase à cor plena, cancela a animação de captura e pula a View Transition no evento pageswap.",
+      "system": "prefers-reduced-motion: reduce remove animações, transições, scroll suave, transições entre páginas e painéis fixos, e desabilita a opção de ativar movimento.",
+      "manual": "body.motion-paused remove animações e transições; o JavaScript solta os painéis, remove --open, --enter, --w e as transformações das capturas, devolve a frase à cor plena, cancela a animação de captura e pula a View Transition no evento pageswap.",
       "persistenceKey": "kb-motion-paused",
-      "scrollLinked": "Palco a partir de 701px e frase em todas as larguras, com requestAnimationFrame, listener passivo e conteúdo sempre visível.",
-      "staticComposition": "Sem --p, o palco fica recortado em até 1488px com raio de 20px e as molduras mantêm a inclinação definida no CSS."
+      "scrollLinked": "Painéis fixos somente com (min-width: 901px) and (min-height: 600px); frase em todas as larguras. requestAnimationFrame, listener passivo e conteúdo sempre visível.",
+      "staticComposition": "Sem movimento, os painéis seguem o fluxo normal, mostram o início de cada tela e o Segundo Cérebro mantém o recorte de 1488px e as telas inclinadas.",
+      "anchor": "Ao fixar ou soltar os painéis, a página rola para manter o painel em leitura no mesmo lugar."
     },
     "breakpoints": [
       {
@@ -440,14 +441,19 @@
         "query": "(min-width: 1600px)"
       },
       {
+        "name": "pinned-panels",
+        "value": "901px × 600px",
+        "query": "(min-width: 901px) and (min-height: 600px)"
+      },
+      {
         "name": "compact-desktop",
         "value": "1000px",
         "query": "(max-width: 1000px)"
       },
       {
-        "name": "tablet-stage",
-        "value": "701px–1000px",
-        "query": "(min-width: 701px) and (max-width: 1000px)"
+        "name": "stacked-panels",
+        "value": "900px",
+        "query": "(max-width: 900px)"
       },
       {
         "name": "gallery-heading-tablet",
@@ -468,7 +474,6 @@
     "layout": {
       "mainContainer": "min(100% - var(--space) * 2, 1296px)",
       "headerContainer": "min(100% - var(--space) * 2, 1392px)",
-      "heroContainer": "Palco de largura total recortado por clip-path em max(24px, (100% - 1488px) / 2); cena das molduras em min(100% - 48px, 1488px).",
       "mobileGutter": "24px",
       "smallMobileGutter": "20px",
       "galleryTabPadding": "10px",
@@ -479,9 +484,12 @@
         "stageMinHeight": "230px",
         "stagePaddingBottom": "22px"
       },
-      "heroTextContainer": "min(100% - var(--space) * 2, 1040px)",
-      "chapter": "clamp(112px, 13vw, 200px); 104px no celular",
-      "stickyHeader": "Cabeçalho fixo de 68px (60px no celular); scroll-padding-top de 84px (76px)."
+      "stickyHeader": "Cabeçalho fixo de 68px (60px no celular); scroll-padding-top de 84px (76px).",
+      "panel": "Largura da janela recortada por clip-path em max(24px, (100% - 1488px) / 2), raio 20px; 12px e 16px no celular. Altura: 100svh menos o cabeçalho, de 560px a 940px.",
+      "panelColumns": "minmax(300px, 0.68fr) para o texto e 1.32fr para as telas, alternando o lado a cada projeto.",
+      "devices": "Área das telas com container-type: size; moldura 3:2 com min(90cqw, 80cqh × 1.5); celular com 86% da altura da moldura, à frente no canto inferior direito.",
+      "panelGap": "16px; 12px no celular.",
+      "pinnedHeight": "280vh (scroll) e 220vh (wipe)."
     },
     "responsiveTypography": [
       {
@@ -491,17 +499,7 @@
       },
       {
         "query": "(max-width: 700px)",
-        "selector": ".hero h1",
-        "fontSize": "clamp(32px, 10.6vw, 56px)"
-      },
-      {
-        "query": "(max-width: 700px)",
-        "selector": ".section-heading h2",
-        "fontSize": "36px"
-      },
-      {
-        "query": "(max-width: 700px)",
-        "selector": ".project-heading h3",
+        "selector": ".scene-copy h2",
         "fontSize": "40px"
       },
       {
@@ -516,7 +514,7 @@
       },
       {
         "query": "(max-width: 360px)",
-        "selector": ".project-heading h3",
+        "selector": ".scene-copy h2",
         "fontSize": "36px"
       },
       {
@@ -594,13 +592,13 @@
   ],
   "narrative": {
     "northStar": "Catálogo de produto digital",
-    "overview": "Um catálogo de produto digital com branco mineral, texto grafite e espaço negativo, contado em primeira pessoa. A tipografia Manrope concentra a expressão em títulos grandes e centralizados; a interface permanece discreta para que capturas reais dos projetos ocupem o primeiro plano.\n\nA página é organizada em capítulos: abertura, projetos, um capítulo escuro sobre como Kauan trabalha e a apresentação pessoal. A fotografia autoral de material prateado é cenografia decorativa. O retrato aparece em escala de cinza e ganha cor sob o ponteiro; as capturas preservam as cores das interfaces. O movimento acompanha a rolagem, pode ser pausado e respeita a preferência do sistema.",
+    "overview": "Um catálogo de produto digital com branco mineral, texto grafite e espaço negativo, contado em primeira pessoa. Os projetos são o conteúdo da página inicial: não há frase de abertura nem apresentação pessoal antes deles.\n\nA página inicial é uma sequência de painéis: um por projeto, com nome, frase de apoio, estado, links e tecnologias de um lado e as telas reais em uma moldura de computador com um celular à frente do outro; depois um painel escuro sobre como Kauan trabalha. Em telas grandes, cada painel fica fixo enquanto a rolagem percorre as telas. A fotografia autoral de material prateado é o cenário do primeiro painel; as capturas preservam as cores das interfaces.",
     "keyCharacteristics": [
-      "Paleta neutra com um único capítulo escuro e verde discreto em estado e foco.",
-      "Uma família tipográfica, contraste forte entre título, frase de apoio e metadados.",
-      "Composição centralizada nos capítulos da página inicial; grade editorial nas páginas de projeto.",
-      "Capturas reais com alternativas textuais e exploração por teclado.",
-      "Movimento ligado à rolagem, opcional e sem interceptar o scroll."
+      "Projetos abrem a página, um painel por projeto.",
+      "Paleta neutra com um único painel escuro e verde discreto em estado e foco.",
+      "Uma família tipográfica, contraste forte entre nome do projeto, frase de apoio e metadados.",
+      "Capturas reais em computador e celular; exploração completa nas páginas de projeto.",
+      "Painéis fixos com rolagem das telas, opcionais e sem interceptar o scroll."
     ],
     "rules": [
       {
@@ -615,7 +613,7 @@
       }
     ],
     "dos": [
-      "Do escrever em primeira pessoa, com frases curtas e uma ideia por texto.",
+      "Do deixar os projetos abrirem a página e escrever em primeira pessoa, com frases curtas e uma ideia por texto.",
       "Do preservar as cores e a proporção das capturas reais; usar a imagem gerada como cenografia decorativa.",
       "Do usar Manrope auto-hospedada, hierarquia de peso contida e espaço negativo.",
       "Do manter foco visível, nomes acessíveis e estado semântico nos controles.",
@@ -623,7 +621,7 @@
       "Do manter a interface e os links úteis quando o JavaScript não estiver disponível."
     ],
     "donts": [
-      "Don't usar pares de slogans, rótulos de processo ou superlativos sem evidência.",
+      "Don't usar frases de efeito antes dos projetos, pares de slogans, rótulos de processo ou superlativos sem evidência.",
       "Don't colocar rótulos ou sobretítulos acima dos títulos.",
       "Don't repetir a mesma entrada animada em todas as seções.",
       "Don't usar sombras de mockup em todos os blocos de conteúdo.",

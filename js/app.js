@@ -11,7 +11,6 @@
   let paused = media.matches || optedOut;
   let activeAnimation;
   const header = document.querySelector(".site-header");
-  const stage = document.querySelector(".hero-stage");
   const statement = document.querySelector("[data-words]");
   const words = statement ? [...statement.querySelectorAll(".word")] : [];
   const updateMotion = () => {
@@ -28,10 +27,7 @@
       toggle.setAttribute("aria-label", toggle.title);
     } else if (toggle) toggle.disabled = false;
     activeAnimation?.cancel();
-    if (paused) {
-      stage?.style.removeProperty("--p");
-      statement?.removeAttribute("data-lit");
-    }
+    if (paused) statement?.removeAttribute("data-lit");
   };
   updateMotion();
   toggle?.addEventListener("click", () => {
@@ -43,11 +39,13 @@
       /* Optional preference. */
     }
     updateMotion();
+    syncScenes();
     renderScroll();
   });
   media.addEventListener("change", (e) => {
     paused = e.matches || optedOut;
     updateMotion();
+    syncScenes();
     renderScroll();
   });
 
@@ -56,18 +54,93 @@
     if (paused) event.viewTransition?.skipTransition();
   });
 
-  // Scroll-linked moments. Default content is visible, no scroll interception.
+  // Project panels: on large screens with motion on, each panel pins while the
+  // page scrolls through it. Otherwise they stay static pictures of the project.
   const clamp = (value) => Math.min(1, Math.max(0, value));
+  const pinQuery = window.matchMedia(
+    "(min-width: 901px) and (min-height: 600px)",
+  );
+  const scenes = [...document.querySelectorAll("[data-scene]")].map((el) => ({
+    el,
+    kind: el.dataset.scene,
+    panel: el.querySelector(".scene-panel"),
+    sticky: el.querySelector(".scene-sticky"),
+    screens: [...el.querySelectorAll(".device-screen")].map((screen) => ({
+      screen,
+      image: screen.querySelector("img"),
+      distance: 0,
+    })),
+  }));
+  let pinned = false;
+  const measureScenes = () =>
+    scenes.forEach((scene) =>
+      scene.screens.forEach((item) => {
+        item.distance = Math.max(
+          0,
+          item.image.offsetHeight - item.screen.clientHeight,
+        );
+      }),
+    );
+  const resetScene = (scene) => {
+    ["--open", "--enter", "--w"].forEach((name) =>
+      scene.panel.style.removeProperty(name),
+    );
+    scene.screens.forEach((item) => item.image.style.removeProperty("transform"));
+  };
+  function syncScenes() {
+    const next = scenes.length > 0 && !paused && pinQuery.matches;
+    if (next === pinned) return;
+    // The page height changes: keep the section being read in view.
+    const top = header?.offsetHeight ?? 0;
+    const anchor = [...document.querySelectorAll(".scene, #atuacao")].find(
+      (el) => el.getBoundingClientRect().bottom > top + 24,
+    );
+    const before = anchor ? Math.max(top, anchor.getBoundingClientRect().top) : 0;
+    pinned = next;
+    document.body.classList.toggle("scenes-pinned", pinned);
+    if (!pinned) scenes.forEach(resetScene);
+    if (anchor)
+      window.scrollBy({
+        top: anchor.getBoundingClientRect().top - before,
+        behavior: "instant",
+      });
+    measureScenes();
+  }
+  function renderScenes() {
+    if (!pinned) return;
+    const top = header?.offsetHeight ?? 0;
+    const view = window.innerHeight;
+    for (const scene of scenes) {
+      const rect = scene.el.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > view) continue;
+      const progress = clamp(
+        (top - rect.top) / (scene.el.offsetHeight - scene.sticky.offsetHeight),
+      );
+      const style = scene.panel.style;
+      if (scene.kind === "scroll") {
+        // The panel opens to full width, then the screens scroll top to bottom.
+        style.setProperty("--open", clamp(progress / 0.12).toFixed(3));
+        const travel = clamp((progress - 0.1) / 0.85);
+        scene.screens.forEach((item) => {
+          item.image.style.transform = `translate3d(0, ${(-travel * item.distance).toFixed(1)}px, 0)`;
+        });
+      } else {
+        // The screens rise in as the panel arrives, then a wipe reveals the next screen.
+        style.setProperty(
+          "--enter",
+          clamp((view - rect.top) / (view - top)).toFixed(3),
+        );
+        style.setProperty("--w", clamp((progress - 0.25) / 0.5).toFixed(3));
+      }
+    }
+  }
+
   let pending = false;
   function renderScroll() {
     pending = false;
     header?.classList.toggle("is-scrolled", window.scrollY > 4);
     if (paused) return;
-    // Hero: the stage opens to full width and the windows settle flat.
-    if (stage && window.innerWidth >= 701) {
-      const progress = clamp(window.scrollY / (window.innerHeight * 0.55));
-      stage.style.setProperty("--p", progress.toFixed(3));
-    }
+    renderScenes();
     // Statement: words light up in reading order as it crosses the viewport.
     if (statement) {
       statement.dataset.lit = "";
@@ -90,11 +163,21 @@
   window.addEventListener(
     "resize",
     () => {
-      if (window.innerWidth < 701) stage?.style.removeProperty("--p");
+      syncScenes();
+      measureScenes();
       renderScroll();
     },
     { passive: true },
   );
+  scenes.forEach((scene) =>
+    scene.screens.forEach((item) =>
+      item.image.addEventListener("load", () => {
+        measureScenes();
+        renderScroll();
+      }),
+    ),
+  );
+  syncScenes();
   renderScroll();
 
   const updatePreview = (preview, device) => {

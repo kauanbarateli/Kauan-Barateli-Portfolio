@@ -60,7 +60,8 @@ test("portfolio presents two real projects with honest status and no budget form
   const html = await readFile(resolve(root, "index.html"), "utf8");
   assert.equal(projects.length, 2);
   assert.match(html, /Em desenvolvimento/);
-  assert.match(html, /Protótipo/);
+  for (const project of projects)
+    assert.match(html, new RegExp(`href="/projetos/${project.slug}/"`));
   assert.doesNotMatch(html, /<form|Solicitar orçamento|Peça um orçamento/);
   assert.match(html, /https:\/\/www.linkedin.com\/in\/kauan-barateli\//);
 });

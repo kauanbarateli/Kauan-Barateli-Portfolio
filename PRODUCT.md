@@ -15,7 +15,8 @@ Apresentar o trabalho de Kauan Sousa Barateli com interfaces reais, projetos exp
 - Exatamente dois projetos neste momento: Ração de Canto e Segundo Cérebro.
 - Sem CTA de orçamento, conforme resposta do proprietário em 28/10/2026.
 - Links para projetos, demonstrações e redes profissionais. Nenhum formulário de contratação.
-- Segundo Cérebro em desenvolvimento: não apresentar protótipo como produto final.
+- Segundo Cérebro em desenvolvimento: o selo "Em desenvolvimento" acompanha o projeto. Por decisão do proprietário (28/10/2026), as telas do protótipo aparecem sem rótulo de protótipo e levam à página do projeto.
+- Página inicial focada nos projetos: sem frase de abertura. A seção "Sobre" está suspensa até haver fotos melhores e imagens produzidas para ela.
 - Preservar a base estática HTML/CSS/JavaScript do repositório.
 - Desktop, tablet e celular; teclado e preferência por movimento reduzido.
 

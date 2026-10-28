@@ -8,10 +8,11 @@ Executada em 28/10/2026, em navegador Edge/Chromium isolado, sobre a versão loc
 - `npm test`: 5 testes aprovados; rotas, âncoras, arquivos, formatos, procedência e distribuição.
 - `scripts/browser-check.mjs`: 12 combinações de rota e largura aprovadas, em **320, 390, 768 e 1440 px**.
 - Revisão de linguagem e layout (28/10/2026): textos em primeira pessoa, nome do projeto como h1, capítulo escuro e novos momentos de movimento verificados nas mesmas larguras.
+- Página inicial focada nos projetos (28/10/2026): painéis de projeto verificados em 320, 390, 768, 1280 × 720 e 1440 × 900. O roteiro confirma que, com movimento ativo em desktop, os painéis ficam fixos, o primeiro se abre e as telas rolam; com movimento reduzido, nada fica fixo.
 - Alternância desktop/celular em todas as galerias e alternância de todas as telas dos dois projetos.
 - Abas via teclado, setas, Home e End. A aba ativa permanece completamente visível, incluindo sua margem de foco.
 - Link para pular conteúdo, navegação entre projetos e acesso aos links das imagens completas.
-- Movimento habilitado/pausado, persistência da preferência e respeito a `prefers-reduced-motion`. O roteiro confirma que a rolagem escreve `--p` no palco e acende palavras da frase, e que o movimento reduzido remove os dois.
+- Movimento habilitado/pausado, persistência da preferência e respeito a `prefers-reduced-motion`. O roteiro confirma que a rolagem fixa os painéis, escreve `--open` no primeiro, move as telas e acende palavras da frase, e que o movimento reduzido remove tudo isso.
 - Transições entre páginas (View Transitions) testadas em Chromium: catálogo → projeto, voltar e próximo projeto, inclusive com movimento pausado, sem erros de página.
 - Conteúdo, links e alternativas de galeria disponíveis sem JavaScript; os controles dependentes de JS ficam ocultos.
 - Nenhum erro JavaScript, imagem ausente ou overflow horizontal nas rotas testadas.
