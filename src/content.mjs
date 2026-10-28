@@ -1,114 +1,116 @@
 export const person = {
   name: "Kauan Barateli",
+  role: "Desenvolvedor web",
+  place: "Maranhão, Brasil",
   linkedin: "https://www.linkedin.com/in/kauan-barateli/",
   github: "https://github.com/kauanbarateli",
 };
 
 // Add a project here and run npm run build. Pages and navigation are generated together.
+// live: true marks a published project; false marks work in progress.
 export const projects = [
   {
     slug: "segundo-cerebro",
     name: "Segundo Cérebro",
-    type: "Produto digital",
+    type: "Aplicativo web",
     status: "Em desenvolvimento",
+    live: false,
     tone: "graphite",
-    title: "Um lugar para\no que importa.",
-    description:
-      "Tarefas, hábitos, conhecimento e finanças. Uma experiência integrada para organizar a vida com mais clareza.",
+    tagline: "Tarefas, hábitos e finanças no mesmo lugar.",
     summary:
-      "Um aplicativo de organização pessoal que aproxima as diferentes partes da rotina. Do primeiro hábito ao planejamento de um projeto, cada tela faz parte de um mesmo ambiente.",
+      "Estou construindo o Segundo Cérebro para juntar o que costuma ficar espalhado em vários apps: tarefas, agenda, hábitos, anotações e finanças. A ideia é abrir um lugar só e saber o que fazer agora.",
     cover: "sc-prototype",
     mobile: "sc-prototype-mobile",
+    preview: "Protótipo da tela inicial",
     tech: ["Next.js", "React", "TypeScript", "Supabase"],
     repo: "https://github.com/kauanbarateli/Segundo-Cerebro",
-    source: "https://github.com/kauanbarateli/Segundo-Cerebro/pull/120",
-    sourceLabel: "Acompanhar desenvolvimento",
-    challenge: "Organizar sem sobrecarregar.",
+    source: "https://github.com/kauanbarateli/Segundo-Cerebro",
+    sourceLabel: "Acompanhar no GitHub",
+    galleryNote:
+      "A primeira tela é o protótipo que guia o app. As outras já estão implementadas e usam dados de exemplo.",
+    challenge: "Muita coisa para organizar sem virar bagunça.",
     challengeText:
-      "Reunir muitas funcionalidades exige escolhas claras: o que aparece primeiro, o que pode esperar e como voltar ao contexto sem perder o foco.",
+      "Juntar tantos módulos em um app pede escolhas claras: o que aparece primeiro, o que pode esperar e como voltar ao que você estava fazendo sem perder o foco.",
     decisions: [
       [
-        "Uma rotina, vários contextos",
-        "Calendário, tarefas e hábitos compartilham a mesma linguagem de navegação.",
+        "Uma navegação para tudo",
+        "Calendário, tarefas e hábitos seguem a mesma estrutura. Quem aprende uma parte já entende as outras.",
       ],
       [
-        "Configurar aos poucos",
-        "Um onboarding progressivo apresenta os módulos e permite deixar etapas para depois.",
+        "Configuração no seu ritmo",
+        "O onboarding apresenta os módulos aos poucos. Dá para pular etapas e voltar depois.",
       ],
       [
-        "Interface com continuidade",
-        "O protótipo orienta a implementação. A galeria distingue a proposta visual das telas já presentes no PR #120.",
+        "Protótipo antes do código",
+        "O protótipo define a linguagem visual, e as telas implementadas seguem essa mesma base.",
       ],
     ],
     frames: [
       {
-        name: "Visão do protótipo",
+        name: "Protótipo",
         image: "sc-prototype",
         mobile: "sc-prototype-mobile",
-        caption:
-          "Protótipo de referência · dados demonstrativos. A implementação continua em evolução.",
+        caption: "Protótipo da tela inicial, a referência para as próximas telas.",
       },
       {
         name: "Início",
         image: "sc-home",
         mobile: "sc-home-mobile",
-        caption:
-          "Interface em desenvolvimento · captura do PR #120. Dados de demonstração.",
+        caption: "Tarefas, agenda, hábitos e um resumo financeiro do dia em uma tela.",
       },
       {
         name: "Hábitos",
         image: "sc-habits",
         mobile: "sc-habits-mobile",
-        caption:
-          "Acompanhamento de hábitos no PR #120 · desktop claro e celular escuro.",
+        caption: "Hábitos do dia com sequência e progresso da semana. No celular, em tema escuro.",
       },
       {
         name: "Financeiro",
         image: "sc-finance",
         mobile: "sc-finance-mobile",
-        caption: "Organização financeira no PR #120 · valores demonstrativos.",
+        caption: "Patrimônio, faturas e o resultado do mês, com gastos por categoria.",
       },
       {
         name: "Calendário",
         image: "sc-calendar",
         mobile: "sc-calendar-mobile",
-        caption:
-          "Calendário no PR #120 · distribuição de atividades e compromissos.",
+        caption: "Compromissos em visão de dia, semana ou mês.",
       },
     ],
   },
   {
     slug: "racao-de-canto",
     name: "Ração de Canto",
-    type: "Landing page · projeto social",
-    status: "Publicado",
+    type: "Landing page para projeto social",
+    status: "No ar",
+    live: true,
     tone: "sand",
-    title: "Uma presença digital.\nUma causa real.",
-    description:
-      "Uma experiência que aproxima pessoas de uma iniciativa de cuidado e proteção animal em São Luís.",
+    tagline: "Um site para ajudar quem cuida dos animais de rua.",
     summary:
-      "O Ração de Canto alimenta, resgata e cuida de animais abandonados. O site apresenta a iniciativa, conta as histórias de Fiel e Pétala e facilita o caminho para ajudar.",
+      "O Ração de Canto é um projeto independente de São Luís que alimenta, resgata e cuida de animais abandonados. Desenvolvi o site para apresentar a iniciativa, contar as histórias do Fiel e da Pétala e deixar claro como ajudar.",
     cover: "racao-desktop",
     mobile: "racao-mobile",
+    preview: "Página inicial do site",
     tech: ["HTML", "CSS", "JavaScript", "Vercel"],
     repo: "https://github.com/kauanbarateli/Racao-de-Canto",
     source: "https://racao-de-canto.vercel.app",
-    sourceLabel: "Visitar site",
-    challenge: "Dar espaço às histórias.",
+    sourceLabel: "Visitar o site",
+    galleryNote: "Telas do site publicado, em desktop e celular.",
+    challenge: "Deixar as histórias falarem primeiro.",
     challengeText:
-      "As fotografias e a trajetória dos animais conduzem a experiência. O movimento acompanha essa narrativa, mantendo a leitura simples e as formas de ajudar sempre claras.",
+      "As fotos e a trajetória dos animais conduzem a página. O movimento acompanha a narrativa sem atrapalhar a leitura, e as formas de ajudar ficam sempre à vista.",
     decisions: [
       [
-        "Narrativa visual",
-        "Fotografias reais, transições suaves e uma sequência que apresenta a iniciativa e seus animais.",
+        "Fotos reais em primeiro plano",
+        "Imagens dos próprios animais e uma sequência que apresenta o projeto, o Fiel e a Pétala.",
       ],
       [
-        "Galeria para explorar",
-        "Fotos e vídeos organizados por filtros, com visualização ampliada e navegação por teclado.",
+        "Galeria com filtros",
+        "Fotos e vídeos separados por história, com visualização ampliada e navegação pelo teclado.",
       ],
       [
-        "Uma base leve",
-        "HTML, CSS e JavaScript sem framework. Imagens otimizadas e respeito à preferência por movimento reduzido.",
+        "Leve de propósito",
+        "HTML, CSS e JavaScript, sem framework. Imagens otimizadas e respeito a quem prefere menos movimento.",
       ],
     ],
     frames: [
@@ -116,16 +118,45 @@ export const projects = [
         name: "Página inicial",
         image: "racao-desktop",
         mobile: "racao-mobile",
-        caption:
-          "Captura real da landing page. Fotografias do próprio projeto social.",
+        caption: "A abertura do site, com a chamada principal e a doação via PIX logo no início.",
       },
       {
         name: "Galeria",
         image: "racao-gallery",
         mobile: "racao-gallery-mobile",
-        caption:
-          "Galeria do projeto com fotografias, vídeos e filtros por história.",
+        caption: "Fotos e vídeos dos animais, com filtros por história.",
       },
     ],
   },
 ];
+
+// Home copy that does not belong to a single project.
+export const homeCopy = {
+  title: "Eu crio sites",
+  titleEcho: "que dá gosto usar.",
+  lead: "Sou o Kauan, desenvolvedor web do Maranhão. Cuido da interface e do código, da primeira ideia ao site no ar.",
+  workTitle: "O que eu ando construindo.",
+  workLead:
+    "Um site no ar para um projeto social e um aplicativo que estou desenvolvendo agora.",
+  statement:
+    "Antes de abrir o editor, tento entender quem vai usar e o que essa pessoa precisa encontrar. Layout, código e animação vêm depois, para deixar esse caminho mais curto.",
+  services: [
+    [
+      "Landing pages",
+      "Uma página com um objetivo: explicar bem a sua ideia e levar a pessoa até a próxima ação.",
+    ],
+    [
+      "Sites institucionais",
+      "Quem vocês são, o que fazem e como falar com vocês, organizado em um site claro.",
+    ],
+    [
+      "Aplicativos web",
+      "Ferramentas sob medida, com telas pensadas para o uso de todo dia.",
+    ],
+  ],
+  aboutTitle: "Um pouco mais sobre mim.",
+  about: [
+    "Tenho 22 anos e trabalho com tecnologia há mais de cinco. Nesse tempo, construí interfaces para e-commerces e liderei equipes.",
+    "Hoje curso Engenharia de Software na UNDB e estou construindo o Segundo Cérebro, um app para organizar as várias áreas da vida em um só lugar.",
+  ],
+};

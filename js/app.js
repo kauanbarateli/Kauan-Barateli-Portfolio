@@ -10,7 +10,10 @@
   }
   let paused = media.matches || optedOut;
   let activeAnimation;
-  const windows = [...document.querySelectorAll(".hero-window")];
+  const header = document.querySelector(".site-header");
+  const stage = document.querySelector(".hero-stage");
+  const statement = document.querySelector("[data-words]");
+  const words = statement ? [...statement.querySelectorAll(".word")] : [];
   const updateMotion = () => {
     document.body.classList.toggle("motion-paused", paused);
     toggle?.setAttribute("aria-pressed", String(paused));
@@ -25,8 +28,10 @@
       toggle.setAttribute("aria-label", toggle.title);
     } else if (toggle) toggle.disabled = false;
     activeAnimation?.cancel();
-    if (paused)
-      windows.forEach((window) => window.style.removeProperty("transform"));
+    if (paused) {
+      stage?.style.removeProperty("--p");
+      statement?.removeAttribute("data-lit");
+    }
   };
   updateMotion();
   toggle?.addEventListener("click", () => {
@@ -46,25 +51,34 @@
     renderScroll();
   });
 
-  // One scroll-linked moment. Default content is visible, no scroll interception.
-  const stage = document.querySelector(".hero-stage");
+  // Old page decides: a paused visitor gets an instant page change.
+  window.addEventListener("pageswap", (event) => {
+    if (paused) event.viewTransition?.skipTransition();
+  });
+
+  // Scroll-linked moments. Default content is visible, no scroll interception.
+  const clamp = (value) => Math.min(1, Math.max(0, value));
   let pending = false;
   function renderScroll() {
     pending = false;
-    if (!stage || paused || window.innerWidth < 701) return;
-    const bounds = stage.getBoundingClientRect();
-    if (bounds.bottom < 0 || bounds.top > window.innerHeight) return;
-    const progress = Math.min(
-      1,
-      Math.max(
-        0,
-        (window.innerHeight * 0.65 - bounds.top) / window.innerHeight,
-      ),
-    );
-    windows.forEach((el, i) => {
-      const direction = i ? -1 : 1;
-      el.style.transform = `perspective(1300px) rotateY(${direction * 8 * (1 - progress)}deg) rotateZ(${(i ? 4 : -2) * (1 - progress)}deg) translateY(${-progress * (i ? 14 : 8)}px)`;
-    });
+    header?.classList.toggle("is-scrolled", window.scrollY > 4);
+    if (paused) return;
+    // Hero: the stage opens to full width and the windows settle flat.
+    if (stage && window.innerWidth >= 701) {
+      const progress = clamp(window.scrollY / (window.innerHeight * 0.55));
+      stage.style.setProperty("--p", progress.toFixed(3));
+    }
+    // Statement: words light up in reading order as it crosses the viewport.
+    if (statement) {
+      statement.dataset.lit = "";
+      const bounds = statement.getBoundingClientRect();
+      const start = window.innerHeight * 0.9;
+      const progress = clamp(
+        (start - bounds.top) / (bounds.height + window.innerHeight * 0.35),
+      );
+      const lit = Math.round(progress * words.length);
+      words.forEach((word, i) => word.classList.toggle("is-lit", i < lit));
+    }
   }
   const onScroll = () => {
     if (!pending) {
@@ -76,8 +90,7 @@
   window.addEventListener(
     "resize",
     () => {
-      if (window.innerWidth < 701)
-        windows.forEach((el) => el.style.removeProperty("transform"));
+      if (window.innerWidth < 701) stage?.style.removeProperty("--p");
       renderScroll();
     },
     { passive: true },

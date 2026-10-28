@@ -190,18 +190,26 @@ try {
   await page.locator(".motion-toggle").click();
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.evaluate(() => scrollTo(0, 200));
-  await page.waitForFunction(() =>
-    document
-      .querySelector(".hero-window")
-      .style.transform.includes("perspective"),
+  await page.waitForFunction(
+    () =>
+      Number(
+        document.querySelector(".hero-stage").style.getPropertyValue("--p"),
+      ) > 0,
+  );
+  await page.locator(".statement").scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () =>
+      document.querySelector(".statement").hasAttribute("data-lit") &&
+      document.querySelectorAll(".statement .word.is-lit").length > 0,
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
-  assert.equal(
-    await page
-      .locator(".hero-window")
-      .first()
-      .evaluate((el) => el.style.transform),
-    "",
+  // The media query change event is dispatched asynchronously.
+  await page.waitForFunction(
+    () =>
+      document.querySelector(".hero-stage").style.getPropertyValue("--p") ===
+        "" && !document.querySelector(".statement").hasAttribute("data-lit"),
+    null,
+    { timeout: 3000 },
   );
   await page.goto(base);
   await page.keyboard.press("Tab");

@@ -1,4 +1,4 @@
-import { person, projects } from "./content.mjs";
+import { person, projects, homeCopy } from "./content.mjs";
 
 const esc = (s) =>
   String(s).replace(
@@ -11,7 +11,7 @@ const esc = (s) =>
 const arrow =
   '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>';
 const external =
-  '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></svg>';
+  '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg>';
 const icon = (name) =>
   name === "desktop"
     ? '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>'
@@ -20,8 +20,18 @@ const img = (name, alt, cls = "", lazy = true) =>
   `<img src="/assets/visuals/${name}.webp" alt="${esc(alt)}" class="${cls}" ${lazy ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async">`;
 const link = (url, text, cls = "text-link") =>
   `<a class="${cls}" href="${url}" target="_blank" rel="noopener noreferrer">${text}${external}<span class="sr-only"> (abre em nova aba)</span></a>`;
+// Shared name between the catalog and the project page, for the page transition.
+const vtName = (p) =>
+  `<span class="vt-name" style="view-transition-name: projeto-${p.slug}">${esc(p.name)}</span>`;
+const status = (p) =>
+  `<span class="status${p.live ? " is-live" : ""}">${esc(p.status)}</span>`;
 const tech = (p) =>
   `<ul class="technologies" aria-label="Tecnologias">${p.tech.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
+const words = (text) =>
+  text
+    .split(" ")
+    .map((w) => `<span class="word">${esc(w)}</span>`)
+    .join(" ");
 const head = (
   title,
   description,
@@ -34,67 +44,73 @@ const head = (
 <link rel="preload" href="/assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/portfolio.css"><script src="/js/app.js" defer></script></head><body class="no-js">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>`;
-const header = (
-  detail = false,
-) => `<header class="site-header"><a class="brand" href="/" aria-label="Kauan Barateli — início"><span class="brand-mark" aria-hidden="true">kb.</span><span>Kauan Barateli</span></a>
-<nav aria-label="Navegação principal"><a href="${detail ? "/" : ""}#projetos">Projetos</a><a href="${detail ? "/" : ""}#atuacao">Atuação</a><a href="${detail ? "/" : ""}#sobre">Sobre</a></nav>
-<button class="motion-toggle" type="button" aria-label="Pausar movimento" aria-pressed="false" title="Pausar movimento"><svg aria-hidden="true" viewBox="0 0 24 24"><path class="pause-icon" d="M9 6v12m6-12v12"/><path class="play-icon" d="m9 5 10 7-10 7Z"/></svg></button></header>`;
+const header = (detail = false) => {
+  const base = detail ? "/" : "";
+  return `<header class="site-header"><div class="site-header-inner"><a class="brand" href="/" aria-label="Kauan Barateli, início"><span class="brand-mark" aria-hidden="true">kb.</span><span class="brand-name">Kauan Barateli</span></a>
+<nav aria-label="Navegação principal"><a href="${base}#projetos">Projetos</a><a href="${base}#atuacao">Atuação</a><a href="${base}#sobre">Sobre</a></nav>
+<button class="motion-toggle" type="button" aria-label="Pausar movimento" aria-pressed="false" title="Pausar movimento"><svg aria-hidden="true" viewBox="0 0 24 24"><path class="pause-icon" d="M9 6v12m6-12v12"/><path class="play-icon" d="m9 5 10 7-10 7Z"/></svg></button></div></header>`;
+};
 const footer = () =>
-  `<footer class="site-footer"><a class="brand" href="/">Kauan Barateli<span aria-hidden="true">.</span></a><p>Desenvolvimento com intenção.</p><div>${link(person.linkedin, "LinkedIn")}${link(person.github, "GitHub")}</div><span class="copyright">© 2026</span></footer>`;
+  `<footer class="site-footer"><a class="brand" href="/">Kauan Barateli<span aria-hidden="true">.</span></a><p>${esc(person.role)} · ${esc(person.place)}</p><div>${link(person.linkedin, "LinkedIn")}${link(person.github, "GitHub")}</div><span class="copyright">© 2026</span></footer>`;
 const devices = (id) =>
-  `<div class="device-controls" role="group" aria-label="Formato da captura de ${esc(id)}"><button type="button" data-device="desktop" aria-pressed="true">${icon("desktop")}<span>Desktop</span></button><button type="button" data-device="mobile" aria-pressed="false">${icon("mobile")}<span>Celular</span></button></div>`;
+  `<div class="device-controls" role="group" aria-label="Formato da tela de ${esc(id)}"><button type="button" data-device="desktop" aria-pressed="true">${icon("desktop")}<span>Desktop</span></button><button type="button" data-device="mobile" aria-pressed="false">${icon("mobile")}<span>Celular</span></button></div>`;
 const frame = (
   p,
-  id,
   detail = false,
 ) => `<div class="showcase ${p.tone}" data-preview data-name="${esc(p.name)}" data-desktop="${p.cover}" data-mobile="${p.mobile}">
-<div class="showcase-toolbar"><span class="showcase-label">${esc(p.name)}</span>${devices(p.name)}</div>
-<div class="device-stage"><div class="browser-frame"><div class="browser-bar" aria-hidden="true"><span></span><span></span><span></span><i>${p.slug === "racao-de-canto" ? "racaodecanto" : "segundocerebro"}</i></div><div class="screen-scroll" tabindex="0" role="region" aria-label="Captura de ${esc(p.name)}; role para explorar a imagem">${img(p.cover, `Interface de ${p.name} em desktop`, "screen-image")}</div></div></div>
-<p class="preview-status" aria-live="polite">${detail ? esc(p.frames[0].caption) : p.slug === "segundo-cerebro" ? "Protótipo · dados demonstrativos" : "Interface real · projeto publicado"}</p></div>`;
+<div class="showcase-toolbar">${devices(p.name)}</div>
+<div class="device-stage"><div class="browser-frame"><div class="browser-bar" aria-hidden="true"><span></span><span></span><span></span><i>${esc(p.name)}</i></div><div class="screen-scroll" tabindex="0" role="region" aria-label="Tela de ${esc(p.name)}; role para ver a página inteira">${img(p.cover, `Interface de ${p.name} em desktop`, "screen-image")}</div></div></div>
+<p class="preview-status" aria-live="polite">${esc(detail ? p.frames[0].caption : p.preview)}</p></div>`;
+const projectLinks = (p) =>
+  `<div class="project-links"><a class="text-link" href="/projetos/${p.slug}/">Conhecer o projeto ${arrow}</a>${link(p.source, p.sourceLabel)}</div>`;
 
 export function home() {
+  const c = homeCopy;
   return (
     head(
-      "Kauan Barateli — Desenvolvimento web",
-      "Sites, landing pages e produtos digitais. Conheça os projetos e a trajetória de Kauan Barateli.",
+      "Kauan Barateli — Desenvolvedor web",
+      "Sites e aplicativos feitos com cuidado. Conheça os projetos de Kauan Barateli, desenvolvedor web do Maranhão.",
     ) +
     header() +
     `
-<main id="conteudo"><section class="hero" aria-labelledby="hero-title"><div class="hero-intro"><h1 id="hero-title">Da ideia à<br><span>experiência.</span></h1><div class="hero-description"><p>Sou Kauan Barateli. Desenvolvo sites e produtos digitais com cuidado em cada detalhe.</p><a class="text-link" href="#projetos">Explore os projetos ${arrow}</a></div></div>
-<div class="hero-stage"><img class="material-image" src="/assets/visuals/material.webp" alt="" fetchpriority="high" width="1536" height="1024"><a class="hero-window hero-window-main" href="/projetos/segundo-cerebro/" aria-label="Explorar Segundo Cérebro"><div class="hero-window-chrome" aria-hidden="true"><span></span><span></span><span></span><i>Segundo Cérebro</i></div>${img("sc-prototype", "Visão geral do protótipo Segundo Cérebro", "", false)}</a><a class="hero-window hero-window-secondary" href="/projetos/racao-de-canto/" aria-label="Explorar Ração de Canto"><div class="hero-window-chrome" aria-hidden="true"><span></span><span></span><span></span><i>Ração de Canto</i></div>${img("racao-desktop", "Landing page do Ração de Canto", "", false)}</a></div>
-<div class="hero-foot"><span>Interfaces, desenvolvimento e movimento.</span><a href="#projetos" aria-label="Rolar para os projetos">Conheça meu trabalho ${arrow}</a></div></section>
-<section id="projetos" class="work-section section-wrap" aria-labelledby="work-title"><div class="section-heading"><h2 id="work-title">Trabalho em foco.</h2><p>Da causa social à organização pessoal.<br>Cada projeto começa com uma necessidade.</p></div>
-${projects.map((p) => `<article class="project"><div class="project-heading"><div><h3><a href="/projetos/${p.slug}/">${esc(p.name)} ${external}</a></h3><p class="project-type">${esc(p.type)}<span>${esc(p.status)}</span></p></div><p>${esc(p.description)}</p></div>${frame(p, p.slug)}<div class="project-foot">${tech(p)}<a class="text-link" href="/projetos/${p.slug}/">Explorar projeto ${arrow}</a></div></article>`).join("")}
+<main id="conteudo"><section class="hero" aria-labelledby="hero-title"><div class="hero-intro"><h1 id="hero-title">${esc(c.title)} <span>${esc(c.titleEcho)}</span></h1><p class="hero-lead">${esc(c.lead)}</p><div class="hero-actions"><a class="button button-dark" href="#projetos">Ver projetos ${arrow}</a><a class="text-link" href="#sobre">Sobre mim ${arrow}</a></div></div>
+<div class="hero-stage"><img class="material-image" src="/assets/visuals/material.webp" alt="" fetchpriority="high" width="1536" height="1024"><div class="hero-scene"><a class="hero-window hero-window-main" href="/projetos/segundo-cerebro/" aria-label="Ver o projeto Segundo Cérebro"><div class="hero-window-chrome" aria-hidden="true"><span></span><span></span><span></span><i>Segundo Cérebro</i></div>${img("sc-prototype", "Protótipo da tela inicial do Segundo Cérebro", "", false)}</a><a class="hero-window hero-window-secondary" href="/projetos/racao-de-canto/" aria-label="Ver o projeto Ração de Canto"><div class="hero-window-chrome" aria-hidden="true"><span></span><span></span><span></span><i>Ração de Canto</i></div>${img("racao-desktop", "Página inicial do site Ração de Canto", "", false)}</a></div></div></section>
+<section id="projetos" class="work-section section-wrap" aria-labelledby="work-title"><div class="section-heading"><h2 id="work-title">${esc(c.workTitle)}</h2><p>${esc(c.workLead)}</p></div>
+${projects.map((p) => `<article class="project" aria-labelledby="projeto-${p.slug}"><div class="project-heading"><h3 id="projeto-${p.slug}"><a href="/projetos/${p.slug}/">${vtName(p)}</a></h3><p class="project-tagline">${esc(p.tagline)}</p><p class="project-meta">${status(p)}<span>${esc(p.type)}</span></p>${projectLinks(p)}</div>${frame(p)}<div class="project-foot">${tech(p)}</div></article>`).join("")}
 </section>
-<section id="atuacao" class="practice-section section-wrap" aria-labelledby="practice-title"><div class="section-heading"><h2 id="practice-title">Forma e função.<br>Do começo ao fim.</h2><p>Interfaces que expressam uma ideia.<br>Desenvolvimento que a coloca em prática.</p></div><div class="practice-list"><div><h3>Landing pages</h3><p>Uma mensagem clara, uma narrativa visual e um caminho simples para agir.</p></div><div><h3>Sites institucionais</h3><p>Uma presença digital que apresenta a identidade, o trabalho e o valor de uma marca.</p></div><div><h3>Experiências digitais</h3><p>Interfaces e aplicações personalizadas para resolver necessidades do dia a dia.</p></div></div></section>
-<section id="sobre" class="about-section section-wrap" aria-labelledby="about-title"><div class="portrait-wrap">${img("portrait", "Kauan Sousa Barateli", "portrait")}<p>Kauan Sousa Barateli<br><span>Desenvolvedor web · Maranhão, Brasil</span></p></div><div class="about-copy"><h2 id="about-title">Curiosidade para criar.<br>Cuidado para construir.</h2><p>Tenho 22 anos e há mais de cinco trabalho com tecnologia. Nesse caminho, construí interfaces para e-commerces e atuei na liderança de equipes.</p><p>Hoje, curso Engenharia de Software na UNDB e desenvolvo o Segundo Cérebro: um aplicativo para ajudar pessoas a organizar diferentes áreas da vida.</p><div class="about-links">${link(person.linkedin, "Minha trajetória no LinkedIn")}${link(person.github, "Meus projetos no GitHub")}</div></div></section></main>${footer()}</body></html>`
+<section id="atuacao" class="practice-section" aria-labelledby="practice-title"><div class="section-wrap"><h2 id="practice-title" class="statement" data-words>${words(c.statement)}</h2><div class="practice-list">${c.services.map(([title, body]) => `<div><h3>${esc(title)}</h3><p>${esc(body)}</p></div>`).join("")}</div></div></section>
+<section id="sobre" class="about-section section-wrap" aria-labelledby="about-title"><div class="portrait-wrap">${img("portrait", "Kauan Sousa Barateli", "portrait")}<p>Kauan Sousa Barateli<br><span>${esc(person.role)} · ${esc(person.place)}</span></p></div><div class="about-copy"><h2 id="about-title">${esc(c.aboutTitle)}</h2>${c.about.map((t) => `<p>${esc(t)}</p>`).join("")}<div class="about-links">${link(person.linkedin, "Minha trajetória no LinkedIn")}${link(person.github, "Meu código no GitHub")}</div></div></section></main>${footer()}</body></html>`
   );
 }
 
 export function projectPage(p) {
   const next = projects[(projects.indexOf(p) + 1) % projects.length];
   return (
-    head(`${p.name} — Kauan Barateli`, p.description, `/projetos/${p.slug}/`) +
+    head(
+      `${p.name} — Kauan Barateli`,
+      `${p.tagline} ${p.summary}`,
+      `/projetos/${p.slug}/`,
+    ) +
     header(true) +
     `
-<main id="conteudo" class="case-page"><section class="case-intro section-wrap"><a class="back-link" href="/#projetos">${arrow} Todos os projetos</a><div class="case-title"><h1>${p.title.split("\n").map(esc).join("<br>")}</h1><div><p>${esc(p.summary)}</p><div class="case-links">${link(p.source, p.sourceLabel, "button button-dark")}${link(p.repo, "Código no GitHub")}</div></div></div><dl class="project-details"><div><dt>Projeto</dt><dd>${esc(p.name)}</dd></div><div><dt>Formato</dt><dd>${esc(p.type)}</dd></div><div><dt>Status</dt><dd>${esc(p.status)}</dd></div><div><dt>Tecnologias</dt><dd>${p.tech.map(esc).join(" · ")}</dd></div></dl></section>
-<section id="demonstracao" class="case-gallery section-wrap" aria-labelledby="gallery-title"><div class="gallery-heading"><h2 id="gallery-title">Explore a interface.</h2><p>Alterne as telas e veja os detalhes de cada formato.</p></div><div class="gallery-tabs" role="tablist" aria-label="Telas do ${esc(p.name)}">${p.frames.map((f, i) => `<button type="button" role="tab" id="tab-${i}" aria-controls="preview-panel" aria-selected="${i === 0}" tabindex="${i === 0 ? "0" : "-1"}" data-frame="${esc(f.image)}" data-mobile="${esc(f.mobile)}" data-caption="${esc(f.caption)}">${esc(f.name)}</button>`).join("")}</div><div id="preview-panel" role="tabpanel" aria-labelledby="tab-0">${frame(p, p.slug, true)}</div><div class="capture-note"><span>Galeria de capturas. Use a rolagem dentro da tela para ver mais.</span><a class="text-link full-capture" href="/assets/visuals/${p.cover}.webp" target="_blank" rel="noopener">Abrir imagem completa ${external}<span class="sr-only"> (nova aba)</span></a></div><noscript><p>As outras telas também estão disponíveis: ${p.frames
+<main id="conteudo" class="case-page"><section class="case-intro section-wrap" aria-labelledby="case-title"><a class="back-link" href="/#projetos">${arrow} Todos os projetos</a><div class="case-title"><div><h1 id="case-title">${vtName(p)}</h1><p class="case-lead">${esc(p.tagline)}</p></div><div><p>${esc(p.summary)}</p><div class="case-links">${link(p.source, p.sourceLabel, "button button-dark")}${p.repo === p.source ? "" : link(p.repo, "Código no GitHub")}</div></div></div><dl class="project-details"><div><dt>Tipo</dt><dd>${esc(p.type)}</dd></div><div><dt>Status</dt><dd>${status(p)}</dd></div><div><dt>Tecnologias</dt><dd>${p.tech.map(esc).join(" · ")}</dd></div></dl></section>
+<section id="demonstracao" class="case-gallery section-wrap" aria-labelledby="gallery-title"><div class="gallery-heading"><h2 id="gallery-title">Navegue pelas telas.</h2><p>${esc(p.galleryNote)}</p></div><div class="gallery-tabs" role="tablist" aria-label="Telas do ${esc(p.name)}">${p.frames.map((f, i) => `<button type="button" role="tab" id="tab-${i}" aria-controls="preview-panel" aria-selected="${i === 0}" tabindex="${i === 0 ? "0" : "-1"}" data-frame="${esc(f.image)}" data-mobile="${esc(f.mobile)}" data-caption="${esc(f.caption)}">${esc(f.name)}</button>`).join("")}</div><div id="preview-panel" role="tabpanel" aria-labelledby="tab-0">${frame(p, true)}</div><div class="capture-note"><span>Role dentro da tela para ver a página inteira.</span><a class="text-link full-capture" href="/assets/visuals/${p.cover}.webp" target="_blank" rel="noopener">Abrir em tamanho real ${external}<span class="sr-only"> (nova aba)</span></a></div><noscript><p>Outras telas: ${p.frames
       .slice(1)
       .map(
         (f) => `<a href="/assets/visuals/${f.image}.webp">${esc(f.name)}</a>`,
       )
       .join(" · ")}.</p></noscript></section>
-<section class="case-story section-wrap"><div><h2>${esc(p.challenge)}</h2><p>${esc(p.challengeText)}</p></div><div class="decision-list">${p.decisions.map(([title, body]) => `<div><h3>${esc(title)}</h3><p>${esc(body)}</p></div>`).join("")}</div></section>
-<aside class="next-project section-wrap"><a href="/projetos/${next.slug}/" aria-label="Próximo projeto: ${esc(next.name)}">${esc(next.name)} ${arrow}</a></aside></main>${footer()}</body></html>`
+<section class="case-story section-wrap" aria-labelledby="story-title"><div class="case-story-lead"><h2 id="story-title">${esc(p.challenge)}</h2><p>${esc(p.challengeText)}</p></div><div class="decision-list">${p.decisions.map(([title, body]) => `<div><h3>${esc(title)}</h3><p>${esc(body)}</p></div>`).join("")}</div></section>
+<aside class="next-project section-wrap" aria-label="Próximo projeto"><a href="/projetos/${next.slug}/"><span class="next-copy">${vtName(next)}<span class="next-tagline">${esc(next.tagline)}</span></span>${arrow}</a></aside></main>${footer()}</body></html>`
   );
 }
 
 export const notFound = () =>
   head(
     "Página não encontrada — Kauan Barateli",
-    "Volte ao portfólio para explorar os projetos.",
+    "Essa página não existe. Volte ao portfólio para ver os projetos.",
   ) +
   header(true) +
-  `<main id="conteudo" class="not-found section-wrap"><h1>Essa página<br>ficou pelo caminho.</h1><p>Você pode continuar pelos projetos do portfólio.</p><a class="button button-dark" href="/#projetos">Ver projetos ${arrow}</a></main>` +
+  `<main id="conteudo" class="not-found section-wrap"><h1>Essa página<br>não existe.</h1><p>Talvez o link tenha mudado. Os projetos continuam aqui.</p><a class="button button-dark" href="/#projetos">Ver projetos ${arrow}</a></main>` +
   footer() +
   "</body></html>";

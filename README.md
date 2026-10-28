@@ -15,22 +15,22 @@ Abra **http://127.0.0.1:41740**. O arquivo de entrada é `index.html`; use HTTP,
 
 ## Conteúdo e manutenção
 
-- `src/content.mjs`: projetos, tecnologias, textos, links, telas e legendas.
+- `src/content.mjs`: textos da página inicial (`homeCopy`), projetos, tecnologias, links, telas e legendas.
 - `src/render.mjs`: estrutura semântica da página inicial, páginas dos projetos e 404.
 - `css/portfolio.css`: tokens, componentes e responsividade.
-- `js/app.js`: seleção de telas, formatos, teclado e movimento opcional.
+- `js/app.js`: seleção de telas, formatos, teclado, cabeçalho e movimento ligado à rolagem (opcional).
 - `assets/visuals/`: imagens WebP, com origem registrada em arquivos `.json` adjacentes.
 - `assets/fonts/`: Manrope variável, hospedada localmente, com licença OFL.
 - `PRODUCT.md`, `DESIGN.md` e `.impeccable/`: decisões de produto e sistema visual.
 
 Edite os arquivos em `src/`, depois execute `npm run build`. O build atualiza os HTMLs da raiz e produz `dist/`. Não edite os HTMLs gerados diretamente.
 
-Para adicionar um projeto, inclua um objeto em `projects`, suas capturas em ambos os formatos e seus arquivos de origem. O build cria a página e os links de navegação. Ao remover um projeto, remova também a respectiva pasta HTML gerada da raiz; `dist/` é reconstruído a partir do conteúdo atual.
+Para adicionar um projeto, inclua um objeto em `projects` (com `tagline`, `preview`, `galleryNote` e `live`), suas capturas em ambos os formatos e seus arquivos de origem. Os textos seguem a voz descrita em `PRODUCT.md`: primeira pessoa, frases curtas e sem rótulos técnicos. O build cria a página e os links de navegação. Ao remover um projeto, remova também a respectiva pasta HTML gerada da raiz; `dist/` é reconstruído a partir do conteúdo atual.
 
 ## Projetos apresentados
 
 - **Ração de Canto:** landing page e galeria do projeto social. HTML, CSS, JavaScript e Vercel. Link para o site publicado.
-- **Segundo Cérebro:** produto em desenvolvimento. Visão do protótipo e capturas reais do PR #120; galeria visual, sem simular autenticação, transações ou alterações de dados.
+- **Segundo Cérebro:** aplicativo em desenvolvimento. A galeria abre no protótipo e segue com telas já implementadas (capturas do PR #120, com dados de exemplo); sem simular autenticação, transações ou alterações de dados. Link para o repositório.
 
 As interfaces possuem seus próprios conteúdos e identidades; a cenografia do portfólio não modifica as capturas. A biografia usa informações fornecidas por Kauan e o LinkedIn indicado no repositório. Não há resultados comerciais, depoimentos ou clientes inventados.
 
