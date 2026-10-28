@@ -12,8 +12,7 @@ Executada em 28/10/2026, em navegador Edge/Chromium isolado, sobre a versão loc
 - Alternância desktop/celular em todas as galerias e alternância de todas as telas dos dois projetos.
 - Abas via teclado, setas, Home e End. A aba ativa permanece completamente visível, incluindo sua margem de foco.
 - Link para pular conteúdo, navegação entre projetos e acesso aos links das imagens completas.
-- Movimento habilitado/pausado, persistência da preferência e respeito a `prefers-reduced-motion`. O roteiro confirma que a rolagem fixa os painéis, escreve `--open` no primeiro, move as telas e acende palavras da frase, e que o movimento reduzido remove tudo isso.
-- Transições entre páginas (View Transitions) testadas em Chromium: catálogo → projeto, voltar e próximo projeto, inclusive com movimento pausado, sem erros de página.
+- Página sem efeitos de rolagem (28/10/2026): painel "Atuação", controle de movimento, painéis fixos e transições entre páginas removidos. Mesmo com movimento permitido, o roteiro confirma que nenhum elemento da página inicial fica fixo, que as telas não se movem com a rolagem e que não há controle de movimento. `prefers-reduced-motion` continua desligando as transições de interação.
 - Conteúdo, links e alternativas de galeria disponíveis sem JavaScript; os controles dependentes de JS ficam ocultos.
 - Nenhum erro JavaScript, imagem ausente ou overflow horizontal nas rotas testadas.
 - Site Ração de Canto verificado com HTTP 200 e título correspondente.

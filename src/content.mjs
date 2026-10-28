@@ -8,10 +8,7 @@ export const person = {
 
 // Add a project here and run npm run build. Pages and navigation are generated together.
 // live: true marks a published project; false marks work in progress.
-// scene: how the home page presents the project on large screens.
-//   "scroll" pins the panel and scrolls the tall screens with the page;
-//   "wipe" pins the panel and reveals each next screen with a wipe.
-//   desktop/mobile list the screens in order; backdrop is an optional scenery image.
+// cover and mobile are the screens on the home panel; backdrop is an optional scenery image behind them.
 export const projects = [
   {
     slug: "segundo-cerebro",
@@ -25,12 +22,7 @@ export const projects = [
       "Estou construindo o Segundo Cérebro para juntar o que costuma ficar espalhado em vários apps: tarefas, agenda, hábitos, anotações e finanças. A ideia é abrir um lugar só e saber o que fazer agora.",
     cover: "sc-prototype",
     mobile: "sc-prototype-mobile",
-    scene: {
-      kind: "scroll",
-      desktop: ["sc-prototype"],
-      mobile: ["sc-prototype-mobile"],
-      backdrop: "material",
-    },
+    backdrop: "material",
     tech: ["Next.js", "React", "TypeScript", "Supabase"],
     repo: "https://github.com/kauanbarateli/Segundo-Cerebro",
     source: "https://github.com/kauanbarateli/Segundo-Cerebro",
@@ -98,11 +90,6 @@ export const projects = [
       "O Ração de Canto é um projeto independente de São Luís que alimenta, resgata e cuida de animais abandonados. Desenvolvi o site para apresentar a iniciativa, contar as histórias do Fiel e da Pétala e deixar claro como ajudar.",
     cover: "racao-desktop",
     mobile: "racao-mobile",
-    scene: {
-      kind: "wipe",
-      desktop: ["racao-desktop", "racao-gallery"],
-      mobile: ["racao-mobile", "racao-gallery-mobile"],
-    },
     tech: ["HTML", "CSS", "JavaScript", "Vercel"],
     repo: "https://github.com/kauanbarateli/Racao-de-Canto",
     source: "https://racao-de-canto.vercel.app",
@@ -141,24 +128,3 @@ export const projects = [
     ],
   },
 ];
-
-// Home copy that does not belong to a single project.
-// The "Sobre" section is on hold until new photos are available.
-export const homeCopy = {
-  statement:
-    "Antes de abrir o editor, tento entender quem vai usar e o que essa pessoa precisa encontrar. Layout, código e animação vêm depois, para deixar esse caminho mais curto.",
-  services: [
-    [
-      "Landing pages",
-      "Uma página com um objetivo: explicar bem a sua ideia e levar a pessoa até a próxima ação.",
-    ],
-    [
-      "Sites institucionais",
-      "Quem vocês são, o que fazem e como falar com vocês, organizado em um site claro.",
-    ],
-    [
-      "Aplicativos web",
-      "Ferramentas sob medida, com telas pensadas para o uso de todo dia.",
-    ],
-  ],
-};

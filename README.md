@@ -15,17 +15,17 @@ Abra **http://127.0.0.1:41740**. O arquivo de entrada é `index.html`; use HTTP,
 
 ## Conteúdo e manutenção
 
-- `src/content.mjs`: projetos (incluindo `scene`, as telas do painel da página inicial), tecnologias, links, telas, legendas e o texto do painel Atuação (`homeCopy`).
+- `src/content.mjs`: projetos, tecnologias, links, telas (`cover` e `mobile` também aparecem no painel da página inicial), cenário opcional (`backdrop`) e legendas.
 - `src/render.mjs`: estrutura semântica da página inicial, páginas dos projetos e 404.
 - `css/portfolio.css`: tokens, componentes e responsividade.
-- `js/app.js`: painéis fixos com rolagem das telas, seleção de telas e formatos, teclado, cabeçalho e movimento opcional.
+- `js/app.js`: linha do cabeçalho ao rolar, seleção de telas e formatos e navegação por teclado na galeria.
 - `assets/visuals/`: imagens WebP, com origem registrada em arquivos `.json` adjacentes.
 - `assets/fonts/`: Manrope variável, hospedada localmente, com licença OFL.
 - `PRODUCT.md`, `DESIGN.md` e `.impeccable/`: decisões de produto e sistema visual.
 
 Edite os arquivos em `src/`, depois execute `npm run build`. O build atualiza os HTMLs da raiz e produz `dist/`. Não edite os HTMLs gerados diretamente.
 
-Para adicionar um projeto, inclua um objeto em `projects` (com `tagline`, `galleryNote`, `live` e `scene`), suas capturas em ambos os formatos e seus arquivos de origem. Os textos seguem a voz descrita em `PRODUCT.md`: primeira pessoa, frases curtas e sem rótulos técnicos. O build cria a página e os links de navegação. Ao remover um projeto, remova também a respectiva pasta HTML gerada da raiz; `dist/` é reconstruído a partir do conteúdo atual.
+Para adicionar um projeto, inclua um objeto em `projects` (com `tagline`, `galleryNote`, `live` e, se quiser, `backdrop`), suas capturas em ambos os formatos e seus arquivos de origem. Os textos seguem a voz descrita em `PRODUCT.md`: primeira pessoa, frases curtas e sem rótulos técnicos. O build cria a página e os links de navegação. Ao remover um projeto, remova também a respectiva pasta HTML gerada da raiz; `dist/` é reconstruído a partir do conteúdo atual.
 
 ## Projetos apresentados
 

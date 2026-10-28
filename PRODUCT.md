@@ -16,12 +16,12 @@ Apresentar o trabalho de Kauan Sousa Barateli com interfaces reais, projetos exp
 - Sem CTA de orçamento, conforme resposta do proprietário em 28/10/2026.
 - Links para projetos, demonstrações e redes profissionais. Nenhum formulário de contratação.
 - Segundo Cérebro em desenvolvimento: o selo "Em desenvolvimento" acompanha o projeto. Por decisão do proprietário (28/10/2026), as telas do protótipo aparecem sem rótulo de protótipo e levam à página do projeto.
-- Página inicial focada nos projetos: sem frase de abertura. A seção "Sobre" está suspensa até haver fotos melhores e imagens produzidas para ela.
+- Página inicial focada nos projetos: sem frase de abertura e sem o painel "Atuação". A seção "Sobre" está suspensa até haver fotos melhores e imagens produzidas para ela.
 - Preservar a base estática HTML/CSS/JavaScript do repositório.
 - Desktop, tablet e celular; teclado e preferência por movimento reduzido.
 
 ## Brand Commitments
-Minimalismo premium, monocromático, tipografia expressiva, espaço negativo, animação cinematográfica discreta. Referência de qualidade: Apple, sem copiar ativos, marca, textos ou composição proprietária. Impeccable orienta acabamento. Imagens geradas complementam interfaces reais.
+Minimalismo premium, monocromático, tipografia expressiva, espaço negativo. Sem efeitos de rolagem por enquanto: o proprietário achou o movimento agressivo (28/10/2026). Referência de qualidade: Apple, sem copiar ativos, marca, textos ou composição proprietária. Impeccable orienta acabamento. Imagens geradas complementam interfaces reais.
 
 ## Voice
 Primeira pessoa, com a cara do Kauan: direta, leve e sem exagero. Frases curtas, uma ideia por texto, português do dia a dia. Evitar slogans em pares, jargão de processo ("dados demonstrativos", "captura do PR #120") e superlativos sem evidência. O estado real de cada projeto é dito uma vez, em linguagem natural.
@@ -34,4 +34,4 @@ Primeira pessoa, com a cara do Kauan: direta, leve e sem exagero. Frases curtas,
 - Fotos pessoais existentes em assets/img. Não há depoimentos, métricas comerciais ou clientes fornecidos.
 
 ## Product Principles
-Mostrar o trabalho antes de qualificá-lo. Distinguir produção de demonstração sem rótulos técnicos. Falar como uma pessoa, não como um catálogo. Manter o conteúdo fácil de ampliar. Tornar movimento opcional.
+Mostrar o trabalho antes de qualificá-lo. Distinguir produção de demonstração sem rótulos técnicos. Falar como uma pessoa, não como um catálogo. Manter o conteúdo fácil de ampliar. Movimento só como resposta a uma ação.

@@ -62,8 +62,7 @@ try {
         width,
         `overflow at ${route} ${width}`,
       );
-      assert.ok(await page.locator('nav a[href$="#atuacao"]').isVisible());
-      assert.ok(await page.locator(".motion-toggle").isDisabled());
+      assert.ok(await page.locator('nav a[href$="#projetos"]').isVisible());
       for (const preview of await page.locator("[data-preview]").all()) {
         if (width < 701)
           assert.equal(
@@ -175,51 +174,24 @@ try {
     fullPage: true,
   });
 
+  // Even with motion allowed, the project panels stay static while scrolling.
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto(base);
-  await page.locator(".motion-toggle").click();
-  assert.equal(
-    await page.locator(".motion-toggle").getAttribute("aria-pressed"),
-    "true",
-  );
-  await page.reload();
-  assert.equal(
-    await page.locator(".motion-toggle").getAttribute("aria-pressed"),
-    "true",
-  );
-  await page.locator(".motion-toggle").click();
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.evaluate(() => scrollTo(0, 200));
-  // Motion on at desktop size: panels pin, the first one opens and its screens scroll.
-  await page.waitForFunction(() =>
-    document.body.classList.contains("scenes-pinned"),
-  );
+  await page.goto(base);
   await page.evaluate(() => scrollTo({ top: innerHeight, behavior: "instant" }));
-  await page.waitForFunction(() => {
-    const panel = document.querySelector(".scene-panel");
-    const image = document.querySelector(".scene .device-screen img");
-    return (
-      Number(panel.style.getPropertyValue("--open")) === 1 &&
-      image.style.transform.includes("translate3d")
-    );
-  });
-  await page.locator(".statement").scrollIntoViewIfNeeded();
-  await page.waitForFunction(
-    () =>
-      document.querySelector(".statement").hasAttribute("data-lit") &&
-      document.querySelectorAll(".statement .word.is-lit").length > 0,
+  assert.deepEqual(
+    await page.evaluate(() => {
+      const sticky = [...document.querySelectorAll("main *")].filter(
+        (el) => getComputedStyle(el).position === "sticky",
+      ).length;
+      const moved = [...document.querySelectorAll(".device-screen img")].filter(
+        (img) => getComputedStyle(img).transform !== "none",
+      ).length;
+      return { sticky, moved, toggle: !!document.querySelector(".motion-toggle") };
+    }),
+    { sticky: 0, moved: 0, toggle: false },
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
-  // The media query change event is dispatched asynchronously.
-  await page.waitForFunction(
-    () =>
-      !document.body.classList.contains("scenes-pinned") &&
-      document.querySelector(".scene-panel").style.getPropertyValue("--open") ===
-        "" &&
-      !document.querySelector(".statement").hasAttribute("data-lit"),
-    null,
-    { timeout: 3000 },
-  );
   await page.goto(base);
   await page.keyboard.press("Tab");
   assert.ok(
@@ -253,7 +225,7 @@ try {
         result: "passed",
         viewports: report,
         consoleErrors: errors,
-        motion: "toggle, persistence and reduced-motion passed",
+        motion: "static project panels; no motion toggle",
         noJS: "content and fallback links available",
         keyboard: "skip link, tabs, arrows, Home and End",
       },
@@ -262,7 +234,7 @@ try {
     ),
   );
   console.log(
-    `PASS: ${report.length} route/viewport combinations; formats, tabs, motion, keyboard and no-JS fallback.`,
+    `PASS: ${report.length} route/viewport combinations; formats, tabs, static panels, keyboard and no-JS fallback.`,
   );
 } finally {
   await browser.close();

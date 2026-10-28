@@ -14,11 +14,6 @@
   --dark: #202226;
   --accent: #405c51;
   --focus: #507d69;
-  --night: #121315;
-  --night-text: #f3f3f1;
-  --night-muted: #a2a4a9;
-  --night-dim: #6b6d72;
-  --night-line: #2c2e33;
   --stage-muted: #4c4f54;
   --header: 68px;
   --space: clamp(24px, 4.5vw, 72px);
@@ -155,9 +150,6 @@ button:disabled {
 section[id] {
   scroll-margin-top: 72px;
 }
-.vt-name {
-  display: inline-block;
-}
 
 /* Actions */
 .text-link {
@@ -226,7 +218,6 @@ section[id] {
   backdrop-filter: saturate(1.6) blur(20px);
   border-bottom: 1px solid transparent;
   transition: border-color 240ms;
-  view-transition-name: site-header;
 }
 .site-header.is-scrolled {
   border-bottom-color: var(--line);
@@ -270,91 +261,43 @@ section[id] {
 .site-header nav a:hover {
   text-decoration: underline;
 }
-.motion-toggle {
-  background: none;
-  border: 1px solid var(--line);
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  padding: 0;
-}
-.motion-toggle:hover {
-  background: #e9e9e6;
-}
-.motion-toggle svg {
-  width: 15px;
-  height: 15px;
-}
-.play-icon {
-  display: none;
-}
-body.motion-paused .pause-icon {
-  display: none;
-}
-body.motion-paused .play-icon {
-  display: initial;
-}
-
-/* Projects: one panel per project. On large screens with motion on, each panel
-   pins while the page scrolls through its screens (js/app.js sets --open, --enter, --w). */
-.scenes {
+/* Projects: one full-height panel per project, text beside its screens. */
+.projects {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-top: 8px;
 }
-.scene-sticky {
+.project {
+  position: relative;
+  width: min(100% - 48px, 1488px);
   height: calc(100svh - var(--header));
   min-height: 560px;
   max-height: 940px;
-}
-body.scenes-pinned .scene[data-scene="scroll"] {
-  height: 280vh;
-}
-body.scenes-pinned .scene[data-scene="wipe"] {
-  height: 220vh;
-}
-body.scenes-pinned .scene-sticky {
-  position: sticky;
-  top: var(--header);
-}
-.scene-panel {
-  --inset: max(24px, calc((100% - 1488px) / 2));
-  --open: 0;
-  --shut: calc(1 - var(--open));
-  position: relative;
-  height: 100%;
+  margin-inline: auto;
   display: grid;
   grid-template-columns: minmax(300px, 0.68fr) minmax(0, 1.32fr);
   grid-template-rows: minmax(0, 1fr);
   align-items: center;
   column-gap: clamp(32px, 4vw, 72px);
-  padding: 48px
-    max(
-      calc(24px + clamp(32px, 4.5vw, 72px)),
-      calc((100% - 1488px) / 2 + 72px)
-    );
+  padding: 48px clamp(32px, 4.5vw, 72px);
+  border-radius: 20px;
   overflow: hidden;
   isolation: isolate;
-  clip-path: inset(
-    0 calc(var(--inset) * var(--shut)) round calc(20px * var(--shut))
-  );
 }
-.scene.graphite .scene-panel {
+.project.graphite {
   background: #dfe2e4;
 }
-.scene.sand .scene-panel {
+.project.sand {
   background: #eae6df;
 }
-.scene.is-reversed .scene-panel {
+.project.is-reversed {
   grid-template-columns: minmax(0, 1.32fr) minmax(300px, 0.68fr);
 }
-.scene.is-reversed .scene-copy {
+.project.is-reversed .project-copy {
   order: 2;
 }
-.scene-backdrop {
+.project-backdrop {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -363,7 +306,7 @@ body.scenes-pinned .scene-sticky {
   object-fit: cover;
   object-position: center 30%;
 }
-.scene-copy {
+.project-copy {
   position: relative;
   z-index: 1;
   display: flex;
@@ -371,12 +314,12 @@ body.scenes-pinned .scene-sticky {
   align-items: flex-start;
   max-width: 32rem;
 }
-.scene-copy h2 {
+.project-copy h2 {
   font-size: clamp(44px, 5vw, 80px);
   line-height: 1.02;
   letter-spacing: -0.04em;
 }
-.scene-copy h2 a:hover {
+.project-copy h2 a:hover {
   color: #3b3d42;
 }
 .project-tagline {
@@ -422,12 +365,12 @@ body.scenes-pinned .scene-sticky {
   flex-wrap: wrap;
   gap: 4px 28px;
 }
-.scene-copy .technologies {
+.project-copy .technologies {
   margin-top: 26px;
   color: var(--stage-muted);
 }
 /* The screens: a desktop frame with a phone in front, sized to the space left. */
-.scene-media {
+.project-media {
   align-self: stretch;
   position: relative;
   display: grid;
@@ -438,14 +381,6 @@ body.scenes-pinned .scene-sticky {
   position: relative;
   width: min(90cqw, calc(80cqh * 1.5));
   aspect-ratio: 3 / 2;
-}
-.scene[data-scene="scroll"] .devices {
-  transform: perspective(1600px) rotateY(calc(-9deg * var(--shut)))
-    rotateX(calc(3deg * var(--shut)));
-}
-.scene[data-scene="wipe"] .devices {
-  transform: translateY(calc((1 - var(--enter, 1)) * 12cqh))
-    scale(calc(0.94 + 0.06 * var(--enter, 1)));
 }
 .device-desktop {
   position: absolute;
@@ -458,7 +393,7 @@ body.scenes-pinned .scene-sticky {
   box-shadow: 0 40px 90px -36px #13171d73;
   transition: box-shadow 300ms var(--ease);
 }
-.scene-media:hover .device-desktop {
+.project-media:hover .device-desktop {
   box-shadow: 0 44px 96px -32px #13171d8c;
 }
 .device-desktop .browser-bar {
@@ -476,14 +411,6 @@ body.scenes-pinned .scene-sticky {
   width: 100%;
   height: auto;
 }
-body.scenes-pinned .device-screen img {
-  will-change: transform;
-}
-.layer-next {
-  position: absolute;
-  inset: 0 0 auto;
-  clip-path: inset(calc((1 - var(--w, 0)) * 100%) 0 0);
-}
 .device-phone {
   position: absolute;
   right: -6%;
@@ -498,9 +425,6 @@ body.scenes-pinned .device-screen img {
 }
 .device-phone .device-screen {
   border-radius: 3.4cqh;
-}
-.scene[data-scene="wipe"] .device-phone {
-  transform: translateX(calc((1 - var(--enter, 1)) * 14cqw));
 }
 .showcase {
   border-radius: var(--radius);
@@ -656,55 +580,6 @@ body.scenes-pinned .device-screen img {
   margin: 0;
   font-size: 13px;
   color: var(--muted);
-}
-
-/* How I work: the one dark chapter. Words light up as the statement is read. */
-.practice-section {
-  width: min(100% - 48px, 1488px);
-  margin: 16px auto 0;
-  border-radius: 20px;
-  padding: clamp(96px, 12vw, 184px) 0;
-  background: var(--night);
-  color: var(--night-text);
-}
-.practice-section ::selection {
-  background: #3a4a43;
-  color: #fff;
-}
-.statement {
-  font-size: clamp(30px, 4.2vw, 58px);
-  line-height: 1.16;
-  letter-spacing: -0.035em;
-  max-width: 21em;
-  text-wrap: pretty;
-}
-.statement[data-lit] .word {
-  color: var(--night-dim);
-  transition: color 420ms var(--ease);
-}
-.statement[data-lit] .word.is-lit {
-  color: var(--night-text);
-}
-.practice-list {
-  margin-top: clamp(80px, 10vw, 152px);
-  border-top: 1px solid var(--night-line);
-}
-.practice-list > div {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  padding: 36px 0;
-  border-bottom: 1px solid var(--night-line);
-  align-items: baseline;
-}
-.practice-list h3 {
-  font-size: clamp(24px, 2.4vw, 34px);
-  letter-spacing: -0.03em;
-}
-.practice-list p {
-  font-size: 17px;
-  color: var(--night-muted);
-  max-width: 44ch;
 }
 
 /* Footer */
@@ -945,7 +820,7 @@ body.scenes-pinned .device-screen img {
   align-items: flex-start;
   gap: 10px;
 }
-.next-copy .vt-name {
+.next-name {
   font-size: clamp(36px, 5.6vw, 80px);
   font-weight: 600;
   letter-spacing: -0.04em;
@@ -963,7 +838,7 @@ body.scenes-pinned .device-screen img {
 .next-project > a:hover svg {
   transform: translateX(8px);
 }
-.next-project > a:hover .vt-name {
+.next-project > a:hover .next-name {
   color: #3b3d42;
 }
 .not-found {
@@ -983,32 +858,6 @@ body.scenes-pinned .device-screen img {
   color: var(--muted);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition {
-    navigation: auto;
-  }
-}
-@keyframes vt-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes vt-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-::view-transition-group(*) {
-  animation-duration: 520ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-::view-transition-old(root) {
-  animation: 160ms ease-in both vt-fade-out;
-}
-::view-transition-new(root) {
-  animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both vt-fade-in;
-}
-
 @media (max-width: 1000px) {
   .device-stage {
     height: 490px;
@@ -1019,9 +868,6 @@ body.scenes-pinned .device-screen img {
   }
   .showcase.is-mobile .screen-scroll {
     height: 453px;
-  }
-  .practice-list > div {
-    gap: 40px;
   }
   .case-title {
     gap: 40px;
@@ -1052,33 +898,31 @@ body.scenes-pinned .device-screen img {
   }
 }
 @media (max-width: 900px) {
-  .scene-sticky {
+  .project,
+  .project.is-reversed {
     height: auto;
     min-height: 0;
     max-height: none;
-  }
-  .scene-panel,
-  .scene.is-reversed .scene-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 64px calc(var(--inset) + 32px) 40px;
+    padding: 64px 32px 40px;
   }
-  .scene-copy,
-  .scene.is-reversed .scene-copy {
+  .project-copy,
+  .project.is-reversed .project-copy {
     order: 0;
     align-items: center;
   }
   .project-meta,
   .project-links,
-  .scene-copy .technologies {
+  .project-copy .technologies {
     justify-content: center;
   }
   .project-tagline {
     max-width: 26ch;
   }
-  .scene-media {
+  .project-media {
     align-self: stretch;
     height: clamp(320px, 62vw, 520px);
     margin-top: 40px;
@@ -1115,11 +959,6 @@ body.scenes-pinned .device-screen img {
     gap: 16px;
     font-size: 12px;
   }
-  .motion-toggle {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-  }
   .button {
     min-height: 48px;
     padding: 12px 22px;
@@ -1131,16 +970,16 @@ body.scenes-pinned .device-screen img {
   :root {
     --header: 60px;
   }
-  .scenes {
+  .projects {
     gap: 12px;
   }
-  .scene-panel,
-  .scene.is-reversed .scene-panel {
-    --inset: 12px;
-    clip-path: inset(0 var(--inset) round 16px);
-    padding: 52px 32px 40px;
+  .project,
+  .project.is-reversed {
+    width: calc(100% - 24px);
+    border-radius: 16px;
+    padding: 52px 24px 40px;
   }
-  .scene-copy h2 {
+  .project-copy h2 {
     font-size: 40px;
   }
   .project-tagline {
@@ -1155,10 +994,10 @@ body.scenes-pinned .device-screen img {
     margin-top: 12px;
     gap: 0 24px;
   }
-  .scene-copy .technologies {
+  .project-copy .technologies {
     margin-top: 16px;
   }
-  .scene-media {
+  .project-media {
     height: clamp(240px, 66vw, 320px);
     margin-top: 32px;
   }
@@ -1217,30 +1056,6 @@ body.scenes-pinned .device-screen img {
   .technologies {
     font-size: 12px;
     gap: 4px 16px;
-  }
-  .practice-section {
-    width: calc(100% - 24px);
-    margin-top: 12px;
-    border-radius: 16px;
-    padding: 88px 0;
-  }
-  .statement {
-    font-size: 28px;
-    line-height: 1.2;
-  }
-  .practice-list {
-    margin-top: 72px;
-  }
-  .practice-list > div {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 26px 0;
-  }
-  .practice-list h3 {
-    font-size: 24px;
-  }
-  .practice-list p {
-    font-size: 15px;
   }
   .site-footer {
     display: grid;
@@ -1366,7 +1181,7 @@ body.scenes-pinned .device-screen img {
     padding: 36px 0 56px;
     gap: 14px;
   }
-  .next-copy .vt-name {
+  .next-name {
     font-size: 34px;
   }
   .next-tagline {
@@ -1401,15 +1216,12 @@ body.scenes-pinned .device-screen img {
   .site-header .brand {
     font-size: 13px;
   }
-  .scene-panel,
-  .scene.is-reversed .scene-panel {
-    padding-inline: 28px;
+  .project,
+  .project.is-reversed {
+    padding-inline: 20px;
   }
-  .scene-copy h2 {
+  .project-copy h2 {
     font-size: 36px;
-  }
-  .statement {
-    font-size: 25px;
   }
   .case-title h1 {
     font-size: 38px;
@@ -1429,18 +1241,8 @@ body.scenes-pinned .device-screen img {
     transition: none !important;
   }
 }
-body.motion-paused *,
-body.motion-paused *::before,
-body.motion-paused *::after {
-  animation: none !important;
-  transition: none !important;
-}
-html:has(body.motion-paused) {
-  scroll-behavior: auto;
-}
 
 .no-js .device-controls,
-.no-js .motion-toggle,
 .no-js .gallery-tabs {
   display: none;
 }

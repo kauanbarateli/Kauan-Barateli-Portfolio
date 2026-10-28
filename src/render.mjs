@@ -1,4 +1,4 @@
-import { person, projects, homeCopy } from "./content.mjs";
+import { person, projects } from "./content.mjs";
 
 const esc = (s) =>
   String(s).replace(
@@ -20,18 +20,10 @@ const img = (name, alt, cls = "", lazy = true) =>
   `<img src="/assets/visuals/${name}.webp" alt="${esc(alt)}" class="${cls}" ${lazy ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async">`;
 const link = (url, text, cls = "text-link") =>
   `<a class="${cls}" href="${url}" target="_blank" rel="noopener noreferrer">${text}${external}<span class="sr-only"> (abre em nova aba)</span></a>`;
-// Shared name between the catalog and the project page, for the page transition.
-const vtName = (p) =>
-  `<span class="vt-name" style="view-transition-name: projeto-${p.slug}">${esc(p.name)}</span>`;
 const status = (p) =>
   `<span class="status${p.live ? " is-live" : ""}">${esc(p.status)}</span>`;
 const tech = (p) =>
   `<ul class="technologies" aria-label="Tecnologias">${p.tech.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
-const words = (text) =>
-  text
-    .split(" ")
-    .map((w) => `<span class="word">${esc(w)}</span>`)
-    .join(" ");
 const head = (
   title,
   description,
@@ -47,8 +39,7 @@ const head = (
 const header = (detail = false) => {
   const base = detail ? "/" : "";
   return `<header class="site-header"><div class="site-header-inner"><a class="brand" href="/" aria-label="Kauan Barateli, início"><span class="brand-mark" aria-hidden="true">kb.</span><span class="brand-name">Kauan Barateli</span></a>
-<nav aria-label="Navegação principal"><a href="${base}#projetos">Projetos</a><a href="${base}#atuacao">Atuação</a></nav>
-<button class="motion-toggle" type="button" aria-label="Pausar movimento" aria-pressed="false" title="Pausar movimento"><svg aria-hidden="true" viewBox="0 0 24 24"><path class="pause-icon" d="M9 6v12m6-12v12"/><path class="play-icon" d="m9 5 10 7-10 7Z"/></svg></button></div></header>`;
+<nav aria-label="Navegação principal"><a href="${base}#projetos">Projetos</a></nav></div></header>`;
 };
 const footer = () =>
   `<footer class="site-footer"><a class="brand" href="/">Kauan Barateli<span aria-hidden="true">.</span></a><p>${esc(person.role)} · ${esc(person.place)}</p><div>${link(person.linkedin, "LinkedIn")}${link(person.github, "GitHub")}</div><span class="copyright">© 2026</span></footer>`;
@@ -65,22 +56,16 @@ const projectLinks = (p) =>
 
 // A project panel on the home page. The screens are a picture of the project:
 // the text links carry the navigation, so the screens link is hidden from assistive tech.
-const scene = (p, index) => {
-  const { kind, desktop, mobile, backdrop } = p.scene;
-  const layers = (names) =>
-    names
-      .map(
-        (name, i) =>
-          `<img src="/assets/visuals/${name}.webp" alt=""${i ? ' class="layer-next"' : ""} ${index === 0 && i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`,
-      )
-      .join("");
-  return `<article class="scene ${p.tone}${index % 2 ? " is-reversed" : ""}" data-scene="${kind}" aria-labelledby="projeto-${p.slug}"><div class="scene-sticky"><div class="scene-panel">${backdrop ? `<img class="scene-backdrop" src="/assets/visuals/${backdrop}.webp" alt="" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">` : ""}
-<div class="scene-copy"><h2 id="projeto-${p.slug}"><a href="/projetos/${p.slug}/">${vtName(p)}</a></h2><p class="project-tagline">${esc(p.tagline)}</p><p class="project-meta">${status(p)}<span>${esc(p.type)}</span></p>${projectLinks(p)}${tech(p)}</div>
-<a class="scene-media" href="/projetos/${p.slug}/" tabindex="-1" aria-hidden="true"><div class="devices"><div class="device-desktop">${browserBar(p)}<div class="device-screen">${layers(desktop)}</div></div><div class="device-phone"><div class="device-screen">${layers(mobile)}</div></div></div></a></div></div></article>`;
+const panel = (p, index) => {
+  const first = index === 0;
+  const screen = (name) =>
+    `<div class="device-screen"><img src="/assets/visuals/${name}.webp" alt="" ${first ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></div>`;
+  return `<article class="project ${p.tone}${index % 2 ? " is-reversed" : ""}" aria-labelledby="projeto-${p.slug}">${p.backdrop ? `<img class="project-backdrop" src="/assets/visuals/${p.backdrop}.webp" alt="" ${first ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">` : ""}
+<div class="project-copy"><h2 id="projeto-${p.slug}"><a href="/projetos/${p.slug}/">${esc(p.name)}</a></h2><p class="project-tagline">${esc(p.tagline)}</p><p class="project-meta">${status(p)}<span>${esc(p.type)}</span></p>${projectLinks(p)}${tech(p)}</div>
+<a class="project-media" href="/projetos/${p.slug}/" tabindex="-1" aria-hidden="true"><div class="devices"><div class="device-desktop">${browserBar(p)}${screen(p.cover)}</div><div class="device-phone">${screen(p.mobile)}</div></div></a></article>`;
 };
 
 export function home() {
-  const c = homeCopy;
   return (
     head(
       "Kauan Barateli — Projetos",
@@ -89,10 +74,9 @@ export function home() {
     header() +
     `
 <main id="conteudo"><h1 class="sr-only">Projetos de Kauan Barateli</h1>
-<div id="projetos" class="scenes">
-${projects.map(scene).join("\n")}
-</div>
-<section id="atuacao" class="practice-section" aria-labelledby="practice-title"><div class="section-wrap"><h2 id="practice-title" class="statement" data-words>${words(c.statement)}</h2><div class="practice-list">${c.services.map(([title, body]) => `<div><h3>${esc(title)}</h3><p>${esc(body)}</p></div>`).join("")}</div></div></section></main>${footer()}</body></html>`
+<div id="projetos" class="projects">
+${projects.map(panel).join("\n")}
+</div></main>${footer()}</body></html>`
   );
 }
 
@@ -106,7 +90,7 @@ export function projectPage(p) {
     ) +
     header(true) +
     `
-<main id="conteudo" class="case-page"><section class="case-intro section-wrap" aria-labelledby="case-title"><a class="back-link" href="/#projetos">${arrow} Todos os projetos</a><div class="case-title"><div><h1 id="case-title">${vtName(p)}</h1><p class="case-lead">${esc(p.tagline)}</p></div><div><p>${esc(p.summary)}</p><div class="case-links">${link(p.source, p.sourceLabel, "button button-dark")}${p.repo === p.source ? "" : link(p.repo, "Código no GitHub")}</div></div></div><dl class="project-details"><div><dt>Tipo</dt><dd>${esc(p.type)}</dd></div><div><dt>Status</dt><dd>${status(p)}</dd></div><div><dt>Tecnologias</dt><dd>${p.tech.map(esc).join(" · ")}</dd></div></dl></section>
+<main id="conteudo" class="case-page"><section class="case-intro section-wrap" aria-labelledby="case-title"><a class="back-link" href="/#projetos">${arrow} Todos os projetos</a><div class="case-title"><div><h1 id="case-title">${esc(p.name)}</h1><p class="case-lead">${esc(p.tagline)}</p></div><div><p>${esc(p.summary)}</p><div class="case-links">${link(p.source, p.sourceLabel, "button button-dark")}${p.repo === p.source ? "" : link(p.repo, "Código no GitHub")}</div></div></div><dl class="project-details"><div><dt>Tipo</dt><dd>${esc(p.type)}</dd></div><div><dt>Status</dt><dd>${status(p)}</dd></div><div><dt>Tecnologias</dt><dd>${p.tech.map(esc).join(" · ")}</dd></div></dl></section>
 <section id="demonstracao" class="case-gallery section-wrap" aria-labelledby="gallery-title"><div class="gallery-heading"><h2 id="gallery-title">Navegue pelas telas.</h2><p>${esc(p.galleryNote)}</p></div><div class="gallery-tabs" role="tablist" aria-label="Telas do ${esc(p.name)}">${p.frames.map((f, i) => `<button type="button" role="tab" id="tab-${i}" aria-controls="preview-panel" aria-selected="${i === 0}" tabindex="${i === 0 ? "0" : "-1"}" data-frame="${esc(f.image)}" data-mobile="${esc(f.mobile)}" data-caption="${esc(f.caption)}">${esc(f.name)}</button>`).join("")}</div><div id="preview-panel" role="tabpanel" aria-labelledby="tab-0">${frame(p)}</div><div class="capture-note"><span>Role dentro da tela para ver a página inteira.</span><a class="text-link full-capture" href="/assets/visuals/${p.cover}.webp" target="_blank" rel="noopener">Abrir em tamanho real ${external}<span class="sr-only"> (nova aba)</span></a></div><noscript><p>Outras telas: ${p.frames
       .slice(1)
       .map(
@@ -114,7 +98,7 @@ export function projectPage(p) {
       )
       .join(" · ")}.</p></noscript></section>
 <section class="case-story section-wrap" aria-labelledby="story-title"><div class="case-story-lead"><h2 id="story-title">${esc(p.challenge)}</h2><p>${esc(p.challengeText)}</p></div><div class="decision-list">${p.decisions.map(([title, body]) => `<div><h3>${esc(title)}</h3><p>${esc(body)}</p></div>`).join("")}</div></section>
-<aside class="next-project section-wrap" aria-label="Próximo projeto"><a href="/projetos/${next.slug}/"><span class="next-copy">${vtName(next)}<span class="next-tagline">${esc(next.tagline)}</span></span>${arrow}</a></aside></main>${footer()}</body></html>`
+<aside class="next-project section-wrap" aria-label="Próximo projeto"><a href="/projetos/${next.slug}/"><span class="next-copy"><span class="next-name">${esc(next.name)}</span><span class="next-tagline">${esc(next.tagline)}</span></span>${arrow}</a></aside></main>${footer()}</body></html>`
   );
 }
 
