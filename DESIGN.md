@@ -269,4 +269,3 @@ Não há campo de formulário ou componente de entrada nesta implementação.
 - Don't ocultar conteúdo até uma animação de entrada terminar.
 - Don't transformar o cinza predominante em uma regra de dessaturação das interfaces exibidas.
 - Don't substituir capturas reais por uma imagem gerada que finja ser a interface navegável.
-
