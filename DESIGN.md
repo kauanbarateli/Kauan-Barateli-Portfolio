@@ -269,7 +269,7 @@ No painel do Segundo Cérebro, as telas aparecem inclinadas sobre a fotografia d
 
 ## Shapes
 
-Cantos suaves distinguem os níveis: painéis 20px (16px no celular), superfícies da galeria 16px, moldura de computador 12px (8px no celular), molduras da galeria 10px. O celular usa raios proporcionais à área das telas (4.6cqh por fora, 3.4cqh na tela). Botões, abas e o seletor de dispositivo são pílulas. As prévias desktop têm apenas os cantos superiores arredondados; a versão de celular usa cantos superiores de 24px na moldura e 17px na área interna. O controle de movimento, o ponto de estado e os pontos decorativos do navegador são circulares.
+Cantos suaves distinguem os níveis: painéis 20px (16px no celular), superfícies da galeria 16px, moldura de computador 12px (8px no celular), molduras da galeria 10px. O celular usa raios proporcionais à área das telas (4.6cqh por fora, 3.4cqh na tela). Botões, abas e o seletor de dispositivo são pílulas. As prévias desktop têm apenas os cantos superiores arredondados; a versão de celular usa cantos superiores de 24px na moldura e 17px na área interna. O controle de movimento, o ponto de estado e os botões da janela são circulares.
 
 ## Motion
 
@@ -301,6 +301,10 @@ O controle de movimento alterna pausar e ativar, com nome acessível e `aria-pre
 Texto: nome como h2 (link para a página do projeto), frase de apoio, linha de estado com o tipo do projeto, links "Conhecer o projeto" e o link externo principal, e as tecnologias. O estado usa um ponto: anel cinza para "Em desenvolvimento", ponto verde para "No ar".
 
 Telas: moldura de computador com barra de navegador e celular à frente, ambos com capturas reais. A área inteira leva à página do projeto; por repetir o link "Conhecer o projeto", ela fica fora da ordem de tabulação e oculta para tecnologias assistivas. Telas e mecanismo de rolagem vêm de `scene` em `src/content.mjs`.
+
+### Window bar
+
+As molduras de computador (painéis e galeria) têm uma barra de 30px (20px no celular) com o nome do projeto centralizado e os três botões de janela do macOS, na ordem e nas cores do sistema: fechar #ff5f57, minimizar #febc2e e ampliar #28c840, com 12px e intervalo de 8px (8px e 5px no celular) e um contorno interno sutil. São decorativos: a barra é oculta para tecnologias assistivas e os botões não respondem a clique.
 
 ### Device selector
 
