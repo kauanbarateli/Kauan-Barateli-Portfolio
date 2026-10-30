@@ -11,7 +11,8 @@ Consulta em 28/10/2026.
 
 ## Imagens
 
-- `assets/visuals/material.webp`: cenário autoral gerado com o modelo de imagens integrado (image_gen), sem dispositivos, interfaces ou marcas. Prompt integral em [material-prompt.txt](material-prompt.txt). Original preservado no diretório generated_images do Codex. Conversão WebP, sem edição artística posterior.
+- `assets/visuals/project-stage.webp`: cenário compartilhado dos dois cards da página inicial, gerado em 30/10/2026 com o modelo de imagens integrado (image_gen). Alumínio acetinado, cinza mineral e luz suave; sem dispositivos, interfaces ou marcas. Prompt integral em [project-stage-prompt.txt](project-stage-prompt.txt). WebP de 1536 × 1024, 11.646 bytes, apenas conversão de formato; orientação e recorte tratados em CSS. Original preservado no diretório generated_images do Codex.
+- `assets/visuals/material.webp`: cenário anterior, preservado como referência histórica. Prompt integral em [material-prompt.txt](material-prompt.txt); deixou de ser usado nos cards em 30/10/2026.
 - `portrait.webp`: foto original do repositório (`Foto Perfil - Kauan Barateli.jpeg`), apenas redimensionada e convertida; o monocromático é aplicado em CSS.
 - `racao-*.webp`: capturas locais da interface real, com fotografias do projeto social. Sem alteração editorial das imagens.
 - `sc-*.webp`: capturas demonstrativas do repositório e do protótipo, com fonte individual nos arquivos `.webp.json`.
