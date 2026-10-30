@@ -145,6 +145,10 @@
         ],
         "tonalRampSource": "generated-preview-only"
       },
+      "project-stage": {
+        "role": "neutral",
+        "displayName": "Cinza mineral compartilhado"
+      },
       "sand-stage": {
         "role": "neutral",
         "displayName": "Areia de exposição",

@@ -11,6 +11,7 @@ colors:
   accent: "#405c51"
   focus: "#507d69"
   stage-muted: "#4c4f54"
+  project-stage: "#e8e9e7"
   graphite-stage: "#e4e7e4"
   sand-stage: "#eae6df"
   dark-hover: "#3b3d42"
@@ -133,11 +134,11 @@ components:
     backgroundColor: "{colors.sand-stage}"
     rounded: "{rounded.surface}"
   project-panel-graphite:
-    backgroundColor: "{colors.graphite-stage}"
+    backgroundColor: "{colors.project-stage}"
     textColor: "{colors.ink}"
     rounded: "{rounded.stage}"
   project-panel-sand:
-    backgroundColor: "{colors.sand-stage}"
+    backgroundColor: "{colors.project-stage}"
     textColor: "{colors.ink}"
     rounded: "{rounded.stage}"
 ---
@@ -150,7 +151,7 @@ components:
 
 Um catálogo de produto digital com branco mineral, texto grafite e espaço negativo, contado em primeira pessoa. Os projetos são o conteúdo da página inicial: não há frase de abertura nem apresentação pessoal antes deles. A tipografia Manrope concentra a expressão nos nomes dos projetos; a interface permanece discreta para que as telas reais ocupem o primeiro plano.
 
-A página inicial é uma sequência de painéis estáticos, como a vitrine de uma loja de produtos: um painel por projeto e o rodapé. Cada painel junta nome, frase de apoio, estado, links e tecnologias de um lado e, do outro, as telas do projeto em uma moldura de computador com um celular à frente. A fotografia autoral de material prateado é o cenário do primeiro painel; as capturas preservam as cores das interfaces.
+A página inicial é uma sequência de painéis estáticos, como a vitrine de uma loja de produtos: um painel por projeto e o rodapé. Cada painel junta nome, frase de apoio, estado, links e tecnologias de um lado e, do outro, as telas do projeto em uma moldura de computador com um celular à frente. Os dois painéis compartilham a mesma cenografia de alumínio acetinado sobre cinza mineral; as capturas preservam as cores das interfaces.
 
 Este documento registra o sistema existente em `css/portfolio.css`, `js/app.js` e `src/render.mjs`. Os textos ficam em `src/content.mjs`. Os tokens representam a base desktop; as alterações responsivas estão descritas abaixo e no sidecar. A estratégia e o conteúdo da superfície pertencem a `.impeccable/surfaces/portfolio.md` e `PRODUCT.md`.
 
@@ -168,7 +169,7 @@ Primeira pessoa, frases curtas, português do dia a dia. Cada texto diz uma cois
 
 ## Colors
 
-A paleta é predominantemente neutra. O papel mineral e o grafite sustentam a composição; os painéis de projeto têm variações suaves de cinza e areia.
+A paleta é predominantemente neutra. O papel mineral e o grafite sustentam a composição; os painéis da página inicial compartilham o cinza mineral. As galerias internas conservam seus tons de cinza e areia.
 
 ### Primary
 
@@ -183,8 +184,9 @@ A paleta é predominantemente neutra. O papel mineral e o grafite sustentam a co
 - **Cinza de leitura — muted:** descrições, metadados e navegação de retorno (5.3:1 sobre o papel).
 - **Apoio do painel — stage-muted:** metadados e tecnologias sobre os painéis de projeto (≥4.8:1 nos tons e no cenário).
 - **Linha mineral — line:** divisores e linha do cabeçalho.
-- **Cinza de exposição — graphite-stage:** palco do Segundo Cérebro na galeria; o painel da página inicial usa um tom próximo, #dfe2e4, sob a fotografia.
-- **Areia de exposição — sand-stage:** painel e palco de Ração de Canto.
+- **Cinza mineral compartilhado — project-stage:** base dos dois painéis da página inicial, inclusive durante o carregamento da imagem.
+- **Cinza de exposição — graphite-stage:** palco do Segundo Cérebro na galeria interna.
+- **Areia de exposição — sand-stage:** palco de Ração de Canto na galeria interna.
 - **Cinza de passagem — tabs-hover:** fundo da aba sob o ponteiro.
 
 O **verde de estado — accent** e o **verde de foco — focus** sinalizam o projeto publicado (ponto preenchido) e tornam a navegação por teclado visível. Não há uma paleta secundária de marca.
@@ -229,9 +231,9 @@ As abas da galeria mantêm rolagem horizontal própria com 10px de padding para 
 
 ## Elevation & Depth
 
-O conteúdo editorial é plano, dividido por linhas, espaço e pela mudança de tom entre painéis. O cabeçalho é translúcido (papel a 80% com desfoque) porque os painéis passam por baixo dele durante a rolagem; uma linha de 1px aparece depois do primeiro pixel rolado. As molduras de computador e celular recebem sombras difusas; o estado selecionado do seletor de dispositivo tem uma sombra pequena. Os valores completos estão em `.impeccable/design.json`.
+O conteúdo editorial é plano, dividido por linhas e espaço entre painéis. O cabeçalho é translúcido (papel a 80% com desfoque) porque os painéis passam por baixo dele durante a rolagem; uma linha de 1px aparece depois do primeiro pixel rolado. As molduras de computador e celular recebem sombras difusas; o estado selecionado do seletor de dispositivo tem uma sombra pequena. Os valores completos estão em `.impeccable/design.json`.
 
-No painel do Segundo Cérebro, as telas aparecem sobre a fotografia de material prateado.
+Os dois painéis usam `assets/visuals/project-stage.webp`, cenografia gerada com luz suave, tons neutros e uma curva discreta de alumínio no canto inferior. No painel invertido, a imagem é espelhada horizontalmente para acompanhar as telas; até 900px, ambos usam a orientação original e o recorte no canto inferior direito. O mesmo arquivo evita deriva de cor, iluminação e textura e é reutilizado pelo cache. O fundo é decorativo, sem texto alternativo ou interação. O prompt está em `docs/project-stage-prompt.txt`.
 
 **The Profundidade da interface Rule.** Aplicar sombras às molduras de interfaces e ao estado selecionado dos controles; separar o restante do conteúdo com espaço, linhas finas e mudança de fundo.
 
